@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-ace-revoked-token-notification.md marco.tiloca@ri.se ludwig.seitz@combitech.com francesca.palombini@ericsson.com secheverria@sei.cmu.edu glewis@sei.cmu.edu
