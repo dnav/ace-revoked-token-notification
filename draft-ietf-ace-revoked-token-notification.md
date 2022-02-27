@@ -413,6 +413,18 @@ The payload of each Observe Notification is formatted as defined in {{ssec-trl-f
 
 Furthermore, an administrator or a registered device can send additional GET requests to the TRL endpoint at any time, in order to retrieve the token hashes of the pertaining revoked Access Tokens. When doing so, the caller of the TRL endpoint can perform a full query (see {{ssec-trl-full-query}}) or a diff query (see {{ssec-trl-diff-query}}).
 
+When receiving a response from the TRL endpoint, a registered device MUST expunge every stored Access Token associated to a token hash specified in the response.
+
+When a Resource Server RS receives a response from the TRL endpoint specifying the token hash H associated to a certain revoked Access Token, the RS might not have received and stored that Access Token yet. This occurs if the Access Token is revoked before it is successfully posted to the Authorization Information Endpoint at the RS (see {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}). Such a delay can be due, for example, to messages that get lost in transmission, or rather to the Client experiencing failures in sending or deliberately holding the Access Token back.
+
+In such a case, the RS performs the following actions.
+
+   * The RS MUST store the token hash H, until gaining knowledge that the associated revoked Access Token is also expired.
+
+      This can happen when receiving a subsequent response from the TRL endpoint (i.e., indicating that the token hash is not in the TRL portion pertaining to the RS anymore), or when the Access Token is posted to the Authorization Information Endpoint and is found to be expired based on its 'exp' claim {{RFC7519}}, if included.
+
+   * The RS MUST NOT accept as valid and store an Access Token posted to the Authorization Information Endpoint, if the corresponding token hash H is among the stored ones.
+
 # Interaction Examples # {#sec-RS-examples}
 
 This section provides examples of interactions between a Resource Server RS as a registered device and an Authorization Server AS. The Authorization Server supports both full query and diff query of the TRL, as defined in {{ssec-trl-full-query}} and {{ssec-trl-diff-query}}, respectively.
@@ -952,6 +964,8 @@ The table below summarizes them, and specifies the CBOR value to use as abbrevia
 RFC EDITOR: Please remove this section.
 
 ## Version -00 to -01 ## {#sec-0-01}
+
+* Added actions to perform upon receiving responses from the TRL endpoint.
 
 * Section restructuring (full- and diff-query as self-standing sections; usage of series transfer pattern moved to the document body).
 
