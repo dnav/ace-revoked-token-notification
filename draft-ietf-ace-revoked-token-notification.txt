@@ -1380,18 +1380,21 @@ Appendix A.  Usage of the "Cursor" Pattern
 
    [ TODO
 
-   Make this an actual third query mode, which means:
+   Merge what is defined below into the document body.  This means:
 
    *  What is defined below for "Full Query Response" becomes part of
-      the full query processing in the document body.
+      the full query processing in the document body.  The successful
+      response payload is a CBOR map if the AS supports both the "Diff
+      Query" mode and the "Cursor" pattern, or just the CBOR array full-
+      set otherwise.
 
-   *  The diff-query processing in the document body is unchanged.
+   *  The diff-query processing in the document body becomes as defined
+      below for "Diff Query Request" and "Diff Query Response".  The
+      successful response payload is a CBOR map if the AS supports both
+      the "Diff Query" mode and the "Cursor" pattern, or just the CBOR
+      array diff-set otherwise.
 
-   *  What is defined below for "Diff Query Request" and "Diff Query
-      Response" defines this third query mode, which can also be moved
-      to the document body.
-
-   *  An example about this third query mode can be added in
+   *  An example using also the "Cursor" pattern can be added in
       "Interaction Examples".
 
    ]

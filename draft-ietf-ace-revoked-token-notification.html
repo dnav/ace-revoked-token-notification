@@ -2183,15 +2183,13 @@ registry has been created to use the "Expert Review" registration procedure <spa
       </h2>
 <p id="appendix-A-1">This section defines how the diff query of the TRL specified in <a href="#ssec-trl-diff-query" class="xref">Section 7</a> can be extended, by using the "Cursor" pattern of the Series Transfer Pattern (see <span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-stp-03#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.bormann-t2trg-stp" class="xref">I-D.bormann-t2trg-stp</a>]</span>).<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">[ TODO<a href="#appendix-A-2" class="pilcrow">¶</a></p>
-<p id="appendix-A-3">Make this an actual third query mode, which means:<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+<p id="appendix-A-3">Merge what is defined below into the document body. This means:<a href="#appendix-A-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-A-4.1">What is defined below for "Full Query Response" becomes part of the full query processing in the document body.<a href="#appendix-A-4.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-4.1">What is defined below for "Full Query Response" becomes part of the full query processing in the document body. The successful response payload is a CBOR map if the AS supports both the "Diff Query" mode and the "Cursor" pattern, or just the CBOR array full-set otherwise.<a href="#appendix-A-4.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-A-4.2">The diff-query processing in the document body is unchanged.<a href="#appendix-A-4.2" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-A-4.2">The diff-query processing in the document body becomes as defined below for "Diff Query Request" and "Diff Query Response". The successful response payload is a CBOR map if the AS supports both the "Diff Query" mode and the "Cursor" pattern, or just the CBOR array diff-set otherwise.<a href="#appendix-A-4.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-A-4.3">What is defined below for "Diff Query Request" and "Diff Query Response" defines this third query mode, which can also be moved to the document body.<a href="#appendix-A-4.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="appendix-A-4.4">An example about this third query mode can be added in "Interaction Examples".<a href="#appendix-A-4.4" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-A-4.3">An example using also the "Cursor" pattern can be added in "Interaction Examples".<a href="#appendix-A-4.3" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="appendix-A-5">]<a href="#appendix-A-5" class="pilcrow">¶</a></p>
