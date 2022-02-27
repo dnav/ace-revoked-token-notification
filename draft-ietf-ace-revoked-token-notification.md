@@ -68,6 +68,7 @@ author:
 
 normative:
   I-D.ietf-ace-oauth-authz:
+  I-D.ietf-core-conditional-attributes:
   RFC2119:
   RFC6749:
   RFC6838:
@@ -91,7 +92,6 @@ normative:
 informative:
   RFC7009:
   I-D.bormann-t2trg-stp:
-  I-D.ietf-core-conditional-attributes:
 
 --- abstract
 
@@ -107,11 +107,11 @@ Even though Access Tokens have expiration times, there are circumstances by whic
 
 As discussed in {{Section 6.1 of I-D.ietf-ace-oauth-authz}}, only client-initiated revocation is currently specified {{RFC7009}} for OAuth 2.0 {{RFC6749}}, based on the assumption that Access Tokens in OAuth are issued with a relatively short lifetime. However, this is not expected to be the case for constrained, intermittently connected devices, that need Access Tokens with relatively long lifetimes.
 
-This document specifies a method for allowing registered devices to access and possibly subscribe to a Token Revocation List (TRL) resource on the Authorization Server, in order to get an updated list of revoked, but yet not expired, pertaining Access Tokens. In particular, registered devices can subscribe to the TRL at the Authorization Server by using resource observation {{RFC7641}} for the Constrained Application Protocol (CoAP) {{RFC7252}}.
+This document specifies a method for allowing registered devices to access and possibly subscribe to a Token Revocation List (TRL) resource on the Authorization Server, in order to obtain an updated list of revoked, but yet not expired, pertaining Access Tokens. In particular, registered devices can subscribe to the TRL at the Authorization Server by using resource observation {{RFC7641}} for the Constrained Application Protocol (CoAP) {{RFC7252}}.
 
 Unlike in the case of token introspection (see {{Section 5.9 of I-D.ietf-ace-oauth-authz}}), a registered device does not provide an owned Access Token to the Authorization Server for inquiring about its current state. Instead, registered devices simply obtain an updated list of revoked, but yet not expired, pertaining Access Tokens, as efficiently identified by corresponding hash values.
 
-In fact, the benefits of this method are that it complements token introspection, and it does not require any additional endpoints on the registered devices. The only additional requirements for registered devices are a request/response interaction with the Authorization Server to access and possibly subscribe to the TRL (see {{sec-overview}}), and the lightweight computation of hash values as Token identifiers (see {{sec-token-name}}).
+The benefits of this method are that it complements token introspection, and it does not require any additional endpoints on the registered devices. The only additional requirements for registered devices are a request/response interaction with the Authorization Server to access and possibly subscribe to the TRL (see {{sec-overview}}), and the lightweight computation of hash values to use as Token identifiers (see {{sec-token-name}}).
 
 ## Terminology ## {#terminology}
 
@@ -127,15 +127,15 @@ This specification also refers to the following terminology.
 
 * Token hash: identifier of an Access Token, in binary format encoding. The token hash has no relation to other possibly used token identifiers, such as the "cti" (CWT ID) claim of CBOR Web Tokens (CWTs) {{RFC8392}}.
 
-* Token Revocation List (TRL): a collection of token hashes, in which the corresponding Access Tokens have been revoked but are not expired yet.
+* Token Revocation List (TRL): a collection of token hashes such that the corresponding Access Tokens have been revoked but are not expired yet.
 
 * TRL resource: a resource on the Authorization Server, with a TRL as its representation.
 
 * TRL endpoint: an endpoint at the Authorization Server associated with the TRL resource. The default name of the TRL endpoint in a url-path is '/revoke/trl'. Implementations are not required to use this name, and can define their own instead.
 
-* Registered device: a device registered at the Authorization Server, i.e., as a Client, or a Resource Server, or both. A registered device acts as caller of the TRL endpoint.
+* Registered device: a device registered at the Authorization Server, i.e., as a Client, or a Resource Server, or both. A registered device acts as a caller of the TRL endpoint.
 
-* Administrator: entity authorized to get full access to the TRL at the Authorization Server, and acting as caller of the TRL endpoint. An administrator is not necessarily a registered device as defined above, i.e., a Client requesting Access Tokens or a Resource Server consuming Access Tokens. How the administrator authorization is established and verified is out of the scope of this specification.
+* Administrator: entity authorized to get full access to the TRL at the Authorization Server, and acting as a caller of the TRL endpoint. An administrator is not necessarily a registered device as defined above, i.e., a Client requesting Access Tokens or a Resource Server consuming Access Tokens. How the administrator authorization is established and verified is out of the scope of this specification.
 
 * Pertaining Access Token:
 
@@ -145,15 +145,15 @@ This specification also refers to the following terminology.
 
 # Protocol Overview # {#sec-overview}
 
-This protocol defines how a CoAP-based Authorization Server informs Clients and Resource Servers, i.e., registered devices, about pertaining revoked Access Tokens. How the relationship between the registered device and the Authorization Server is established is out of the scope of this specification.
+This protocol defines how a CoAP-based Authorization Server informs Clients and Resource Servers, i.e., registered devices, about pertaining revoked Access Tokens. How the relationship between a registered device and the Authorization Server is established is out of the scope of this specification.
 
 At a high level, the steps of this protocol are as follows.
 
 * Upon startup, the Authorization Server creates a single TRL resource. At any point in time, the TRL resource represents the list of all revoked Access Tokens issued by the Authorization Server that are not expired yet.
 
-* When a device registers at the Authorization Server, it receives the url-path to the TRL resource.
+* When a device registers at the Authorization Server, it also receives the url-path to the TRL resource.
 
-   After the registration procedure is finished, the registered device sends an Observation Request to that TRL resource as described in {{RFC7641}}, i.e., a GET request with an Observe option set to 0 (register). By doing so, the registered device effectively subscribes to the TRL resource, as interested to receive notifications about its update. Upon receiving the request, the Authorization Server adds the registered device to the list of observers of the TRL resource.
+   After the registration procedure is finished, the registered device can send an Observation Request to the TRL resource as described in {{RFC7641}}, i.e., a GET request with an Observe option set to 0 (register). By doing so, the registered device effectively subscribes to the TRL resource, as interested to receive notifications about its update. Upon receiving the request, the Authorization Server adds the registered device to the list of observers of the TRL resource.
 
    At any time, the registered device can send a GET request to the TRL endpoint. When doing so, it can request for: the current list of pertaining revoked Access Tokens (see {{ssec-trl-full-query}}); or the most recent TRL updates occurred over the list of pertaining revoked Access Tokens (see {{ssec-trl-diff-query}}). In either case, the registered device may especially rely on an Observation Request for subscribing to the TRL resource as discussed above.
 
@@ -291,7 +291,7 @@ The TRL endpoint allows the following query parameter in a GET request.
 
    If the GET request is not an Observation Request, the Authorization Server MUST ignore the 'pmax' parameter, in case this is included.
 
-* 'diff': if included, it indicates to perform a diff query of the TRL. Its value MUST be either:
+* 'diff': if included, it indicates to perform a diff query of the TRL (see {{ssec-trl-diff-query}}). Its value MUST be either:
 
    - the integer 0, indicating that a (notification) response should include as many diff entries as the Authorization Server can provide in the response; or
 
@@ -307,15 +307,15 @@ In order to produce a (notification) response to a GET request asking for a full
 
     * If the requester is an administrator, HASHES specifies all the token hashes in the current TRL resource representation.
 
-2. The Authorization Server sends a 2.05 (Content) Response to the requester, with a CBOR array 'full' as payload. Each element of the array specifies one of the token hashes from the set HASHES, encoded as a CBOR byte string.
+2. The Authorization Server sends a 2.05 (Content) Response to the requester, with a CBOR array 'full-set' as payload. Each element of the array specifies one of the token hashes from the set HASHES, encoded as a CBOR byte string.
 
    The order of the token hashes in the CBOR array is irrelevant, i.e., the CBOR array MUST be treated as a set in which the order has no significant meaning.
 
-The CDDL definition {{RFC8610}} of the CBOR array 'full' specified as payload in the response from the Authorization Server is provided below.
+The CDDL definition {{RFC8610}} of the CBOR array 'full-set' specified as payload in the response from the Authorization Server is provided below.
 
 ~~~~~~~~~~~ CDDL
    token-hash = bytes
-   full = [* token-hash]
+   full-set = [* token-hash]
 ~~~~~~~~~~~
 {: #cddl-full title="CDDL definition of the response payload following a Full Query request to the TRL endpoint" artwork-align="left"}
 
@@ -323,7 +323,7 @@ The CDDL definition {{RFC8610}} of the CBOR array 'full' specified as payload in
 
 In order to produce a (notification) response to a GET request asking for a diff query of the TRL, the Authorization Server performs the following actions.
 
-1. The Authorization Server defines the positive integer NUM. If the value N specified in the query parameter 'diff' of the GET request is equal to 0 or greater than a pre-defined positive integer N\_MAX, then NUM takes the value of N_MAX. Otherwise, NUM takes N.
+1. The Authorization Server defines the positive integer NUM. If the value N specified in the query parameter 'diff' in the GET request is equal to 0 or greater than a pre-defined positive integer N\_MAX, then NUM takes the value of N_MAX. Otherwise, NUM takes N.
 
 2. The Authorization Server prepares U = min(NUM, SIZE) diff entries, where SIZE <= N_MAX is the number of TRL updates pertaining to the requester and currently stored at the Authorization Server. That is, the diff entries are related to the U most recent TRL updates pertaining to the requester. In particular, the first entry refers to the most recent of such updates, the second entry refers to the second from last of such updates, and so on.
 
@@ -335,23 +335,23 @@ In order to produce a (notification) response to a GET request asking for a diff
 
     The order of the token hashes in the CBOR arrays 'removed' and 'added' is irrelevant. That is, the CBOR arrays 'removed' and 'added' MUST be treated as a set in which the order of elements has no significant meaning.
 
-3. The Authorization Server prepares a 2.05 (Content) Response for the requester, with a CBOR array 'diff' of U elements as payload. Each element of the CBOR array 'diff' specifies one of the CBOR arrays 'diff-entry' prepared at step 2 as diff entries.
+3. The Authorization Server prepares a 2.05 (Content) Response for the requester, with a CBOR array 'diff-set' of U elements as payload. Each element of the CBOR array 'diff-set' specifies one of the CBOR arrays 'diff-entry' prepared at step 2 as diff entries.
 
-   Within the CBOR array 'diff', the CBOR arrays 'diff-entry' MUST be sorted to reflect the corresponding updates to the TRL in reverse chronological order. That is, the first 'diff-entry' element of 'diff' relates to the most recent update to the portion of the TRL pertaining to the requester. The second 'diff-entry' element of 'diff' relates to the second from last most recent update to that portion, and so on.
+   Within the CBOR array 'diff-set', the CBOR arrays 'diff-entry' MUST be sorted to reflect the corresponding updates to the TRL in reverse chronological order. That is, the first 'diff-entry' element of 'diff-set' relates to the most recent update to the portion of the TRL pertaining to the requester. The second 'diff-entry' element of 'diff-set' relates to the second from last most recent update to that portion, and so on.
 
-The CDDL definition {{RFC8610}} of the CBOR array 'diff' specified as payload in the response from the Authorization Server is provided below.
+The CDDL definition {{RFC8610}} of the CBOR array 'diff-set' specified as payload in the response from the Authorization Server is provided below.
 
 ~~~~~~~~~~~ CDDL
    token-hash = bytes
    trl-patch = [* token-hash]
    diff-entry = [removed: trl-patch, added: trl-patch]
-   diff = [* diff-entry]
+   diff-set = [* diff-entry]
 ~~~~~~~~~~~
 {: #cddl-diff title="CDDL definition of the response payload following a Diff Query request to the TRL endpoint" artwork-align="left"}
 
 If the Authorization Server supports diff queries:
 
-* The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'diff' parameter specifies a value other than 0 or than a positive integer.
+* The Authorization Server MUST return a 4.00 (Bad Request) response in case the query parameter 'diff' of the GET request specifies a value other than 0 or than a positive integer.
 
 * The Authorization Server MUST keep track of N\_MAX most recent updates to the portion of the TRL that pertains to each caller of the TRL endpoint. The particular method to achieve this is implementation-specific.
 
@@ -359,7 +359,7 @@ If the Authorization Server supports diff queries:
 
 * The Authorization Server SHOULD provide registered devices and administrators with the value of N_MAX, upon their registration (see {{sec-registration}}).
 
-If the Authorization Server does not support diff queries, it proceeds as when processing a full query (see {{ssec-trl-full-query}}).
+If the Authorization Server does not support diff queries, it ignores the query parameter 'diff' in the GET request and proceeds as when processing a full query of the TRL (see {{ssec-trl-full-query}}).
 
 {{sec-series-pattern}} discusses how the diff query of the TRL is in fact a usage example of the Series Transfer Pattern defined in {{I-D.bormann-t2trg-stp}}.
 
@@ -375,9 +375,9 @@ During the registration process at the Authorization Server, an administrator or
 
 * Optionally, a positive integer N\_MAX, if the Authorization Server supports diff queries of the TRL resource (see {{ssec-trl-diff-query}}).
 
-After the registration procedure is finished, the administrator or registered device performs a GET request to the TRL resource, including the CoAP Observe option set to 0 (register), in order to start an observation of the TRL resource at the Authorization Server, as per {{Section 3.1 of RFC7641}}. The GET request can express the wish for a full query (see {{ssec-trl-full-query}}) or a diff query (see {{ssec-trl-diff-query}}) of the TRL.
+After the registration procedure is finished, the administrator or registered device can send a GET request to the TRL resource, including the CoAP Observe option set to 0 (register), in order to start an observation of the TRL resource at the Authorization Server as per {{Section 3.1 of RFC7641}}. The GET request can express the wish for a full query (see {{ssec-trl-full-query}}) or a diff query (see {{ssec-trl-diff-query}}) of the TRL.
 
-In case the request is successfully processed, The Authorization Server replies using the CoAP response code 2.05 (Content) and including the CoAP Observe option in the response. The payload of the response is formatted as defined in {{ssec-trl-full-query}} or in {{ssec-trl-diff-query}}, in case the GET request was for a full query or a diff query of the TRL, respectively.
+In case the request is successfully processed, the Authorization Server replies with a response speficying the CoAP response code 2.05 (Content) and including the CoAP Observe option. The payload of the response is formatted as defined in {{ssec-trl-full-query}} or in {{ssec-trl-diff-query}}, in case the GET yielded the execution of a full query or a diff query of the TRL, respectively.
 
 Further details about the registration process at the Authorization Server are out of scope for this specification. Note that the registration process is also out of the scope of the ACE framework for Authentication and Authorization (see {{Section 5.5 of I-D.ietf-ace-oauth-authz}}).
 
@@ -387,19 +387,19 @@ When the TRL is updated (see {{ssec-trl-update}}), the Authorization Server send
 
 If the 'pmax' query parameter was specified in the Observation Request starting an observation (see {{sec-trl-endpoint}}), the Authorization Server might accordingly send additional Observe Notifications to the associated observer. That is, the Authorization Server ensures that no more than pmax seconds elapse between two consecutive notifications sent to that observer, regardless whether the TRL resource has changed or not. If the 'pmax' query parameter was not specified in the Observation Request, a possible maximum time to consider is up to the Authorization Server.
 
-The payload of each Observe Notification is formatted as defined in {{ssec-trl-full-query}} or in {{ssec-trl-diff-query}}, in case the original Observation Request was for a full query or a diff query of the TRL, respectively.
+The payload of each Observe Notification is formatted as defined in {{ssec-trl-full-query}} or in {{ssec-trl-diff-query}}, in case the original Observation Request yielded the execution of a full query or a diff query of the TRL, respectively.
 
 Furthermore, an administrator or a registered device can send additional GET requests to the TRL endpoint at any time, in order to retrieve the token hashes of the pertaining revoked Access Tokens. When doing so, the caller of the TRL endpoint can perform a full query (see {{ssec-trl-full-query}}) or a diff query (see {{ssec-trl-diff-query}}).
 
 # Interaction Examples # {#sec-RS-examples}
 
-This section provides examples of interactions between a Resource Server RS as registered device and an Authorization Server AS. The Authorization Server supports both full query and diff query of the TRL, as defined in {{ssec-trl-full-query}} and {{ssec-trl-diff-query}}, respectively.
+This section provides examples of interactions between a Resource Server RS as a registered device and an Authorization Server AS. The Authorization Server supports both full query and diff query of the TRL, as defined in {{ssec-trl-full-query}} and {{ssec-trl-diff-query}}, respectively.
 
 The details of the registration process are omitted, but it is assumed that the Resource Server sends an unspecified payload to the Authorization Server, which replies with a 2.01 (Created) response.
 
 The payload of the registration response is a CBOR map, which includes the following entries:
 
-* a "trl" parameter, specifying the path of the TRL resource;
+* a "trl_path" parameter, specifying the path of the TRL resource;
 
 * a "trl_hash" parameter, specifying the hash function used to computed token hashes as defined in {{sec-token-name}};
 
@@ -420,13 +420,13 @@ RS                                     AS
 +-------------------------------------->|
 |                                       |
 |<--------------------------------------+
-|           2.01 CREATED                |
-|            Payload: {                 |
-|               ...                     |
-|               "trl" = "revoke/trl",   |
-|               "trl_hash" = "sha-256", |
-|               "n_max" = 10            |
-|            }                          |
+|        2.01 CREATED                   |
+|         Payload: {                    |
+|          ...                          |
+|            "trl_path" = "revoke/trl", |
+|            "trl_hash" = "sha-256",    |
+|            "n_max" = 10               |
+|         }                             |
 |                                       |
 | GET Observe: 0                        |
 |  coap://example.as.com/revoke/trl/    |
@@ -496,13 +496,13 @@ RS                                            AS
 +--------------------------------------------->|
 |                                              |
 |<---------------------------------------------+
-|                  2.01 CREATED                |
-|                   Payload: {                 |
-|                      ...                     |
-|                      "trl" = "revoke/trl",   |
-|                      "trl_hash" = "sha-256", |
-|                      "n_max" = 10            |
-|                   }                          |
+|               2.01 CREATED                   |
+|                Payload: {                    |
+|                   ...                        |
+|                   "trl_path" = "revoke/trl", |
+|                   "trl_hash" = "sha-256",    |
+|                   "n_max" = 10               |
+|                }                             |
 |                                              |
 | GET Observe: 0                               |
 |  coap://example.as.com/revoke/trl?diff=3     |
@@ -578,7 +578,7 @@ RS                                            AS
 
 The example also considers one of the notifications from the Authorization Server to get lost in transmission, and thus not reaching the Resource Server.
 
-When this happens, and after a waiting time defined by the application has elapsed, the Resource Server sends a GET request with no observation to the Authorization Server, to perform a diff query of the TRL. The Resource Server indicates N=8 as value of the query parameter "diff", i.e., as the maximum number of diff entries to be specified in a response from the Authorization Server.
+When this happens, and after a waiting time defined by the application has elapsed, the Resource Server sends a GET request with no Observe Option to the Authorization Server, to perform a diff query of the TRL. The Resource Server indicates N=8 as value of the query parameter "diff", i.e., as the maximum number of diff entries to be specified in a response from the Authorization Server.
 
 ~~~~~~~~~~~
 RS                                            AS
@@ -587,13 +587,13 @@ RS                                            AS
 +--------------------------------------------->|
 |                                              |
 |<---------------------------------------------+
-|                  2.01 CREATED                |
-|                   Payload: {                 |
-|                      ...                     |
-|                      "trl" = "revoke/trl",   |
-|                      "trl_hash" = "sha-256", |
-|                      "n_max" = 10            |
-|                   }                          |
+|               2.01 CREATED                   |
+|                Payload: {                    |
+|                   ...                        |
+|                   "trl_path" = "revoke/trl", |
+|                   "trl_hash" = "sha-256",    |
+|                   "n_max" = 10               |
+|                }                             |
 |                                              |
 | GET Observe: 0                               |
 |  coap://example.as.com/revoke/trl/           |
@@ -677,11 +677,13 @@ The Authorization Server MUST ensure that each registered device can access and 
 
 Disclosing any information about revoked Access Tokens to entities other than the intended registered devices may result in privacy concerns. Therefore, the Authorization Server MUST ensure that, other than registered devices accessing their own pertaining portion of the TRL, only authorized and authenticated administrators can retrieve the full TRL. To this end, the Authorization Server may rely on an access control list or similar.
 
-If a registered device has many non-expired Access Tokens associated with itself that are revoked, the pertaining portion of the TRL could grow to a size bigger than what the registered device is prepared to handle upon reception, especially if relying on a full query of the TRL resource (see {{ssec-trl-full-query}}). This could be exploited by attackers to negatively affect the behavior of a registered device. Issuing Access Tokens with not too long expiration time could help reduce the size of a TRL, but an Authorization Server SHOULD take measures to limit this size.
+If a registered device has many non-expired Access Tokens associated with itself that are revoked, the pertaining portion of the TRL could grow to a size bigger than what the registered device is prepared to handle upon reception, especially if relying on a full query of the TRL resource (see {{ssec-trl-full-query}}). This could be exploited by attackers to negatively affect the behaviour of a registered device. Issuing Access Tokens with not too long expiration time could help reduce the size of a TRL, but an Authorization Server SHOULD take measures to limit this size.
 
 Most of the communication about revoked Access Tokens presented in this specification relies on CoAP Observe Notifications sent from the Authorization Server to a registered device. The suppression of those notifications by an external attacker that has access to the network would prevent registered devices from ever knowing that their pertaining Access Tokens have been revoked. To avoid this, a registered device SHOULD NOT rely solely on the CoAP Observe notifications. In particular, a registered device SHOULD also regularly poll the Authorization Server for the most current information about revoked Access Tokens, by sending GET requests to the TRL endpoint according to a related application policy.
 
 # IANA Considerations # {#iana}
+
+RFC EDITOR: Throughout this section, please replace \[this document\] with the RFC number of this specification and remove this note.
 
 This document has the following actions for IANA.
 
@@ -780,9 +782,9 @@ For each registered device, the Authorization Server maintains an update collect
 
 4. The Authorization Server creates a new series item including the two sets from step 3, and adds the series item to the update collection associated with the registered device.
 
-When responding to a diff query request from a registered device (see {{ssec-trl-diff-query}}), 'diff' is a subset of the collection associated with the requester, where each 'diff_entry' record is a series item from that collection. Note that 'diff' specifies the whole current collection when the value of U is equal to SIZE, i.e., the current number of series items in the collection.
+When responding to a diff query request from a registered device (see {{ssec-trl-diff-query}}), 'diff-set' is a subset of the collection associated with the requester, where each 'diff_entry' record is a series item from that collection. Note that 'diff-set' specifies the whole current collection when the value of U is equal to SIZE, i.e., the current number of series items in the collection.
 
-The value N of the 'diff' query parameter in the diff query request allows the requester and the Authorization Server to trade the amount of provided information with the latency of the information transfer.
+The value N of the query parameter 'diff' in the GET request allows the requester and the Authorization Server to trade the amount of provided information with the latency of the information transfer.
 
 Since the collection associated with each registered device includes up to N_MAX series item, the Authorization Server deletes the oldest series item when a new one is generated and added to the end of the collection, due to a new TRL update pertaining to that registered device. This addresses the question "When can the server decide to no longer retain older items?" in {{Section 3.2 of I-D.bormann-t2trg-stp}}.
 
@@ -798,21 +800,21 @@ Furthermore, the Authorization Server defines an unsigned integer MAX_DIFF_BATCH
 
 Finally, the full query and diff query exchanges defined in {{ssec-trl-full-query}} and {{ssec-trl-diff-query}} are extended as follows.
 
-In particular, successul responses from the TRL endpoint MUST use the Content-Format "application/ace-trl+cbor" defined in {{iana-content-type}} of this specification.
+In particular, successful responses from the TRL endpoint MUST use the Content-Format "application/ace-trl+cbor" defined in {{iana-content-type}} of this specification.
 
 ## Full Query Request # {#ssec-trl-full-query-extended-req}
 
-No changes apply to what defined in {{ssec-trl-full-query}}.
+No changes apply to what is defined in {{ssec-trl-full-query}}.
 
 ## Full Query Response
 
 When sending a 2.05 (Content) response to a full query request (see {{ssec-trl-full-query-extended-req}}), the response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
-* 'trl': this field MUST include a CBOR array of token hashes. The CBOR array is populated and formatted as defined for the CBOR array 'full' in {{ssec-trl-full-query}}.
+* 'full-set': this field MUST include a CBOR array of token hashes. The CBOR array is populated and formatted as defined for the CBOR array 'full-set' in {{ssec-trl-full-query}}.
 
-* 'cursor': this field MUST include either the CBOR simple value Null or a CBOR unsigned integer.
+* 'cursor': this field MUST include either the CBOR simple value "null" (0xf6) or a CBOR unsigned integer.
 
-   The CBOR simple value Null MUST be used to indicate that there are currently no TRL updates pertinent to the requester, i.e., the update collection for that requester is empty. This is the case from when the requester registers at the Authorization Server until a first update pertaining that requester occurs to the TRL.
+   The CBOR simple value "null" MUST be used to indicate that there are currently no TRL updates pertinent to the requester, i.e., the update collection for that requester is empty. This is the case from when the requester registers at the Authorization Server until a first update pertaining that requester occurs to the TRL.
 
    Otherwise, the field MUST include a CBOR unsigned integer, encoding the 'index' value of the last series item in the collection, as corresponding to the most recent update pertaining to the requester occurred to the TRL.
 
@@ -830,11 +832,11 @@ If the collection associated with the requester has no elements, the Authorizati
 
 The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
-* 'diff': this field MUST include an empty CBOR array.
+* 'diff-set': this field MUST include an empty CBOR array.
 
-* 'cursor': this field MUST include the CBOR simple value Null.
+* 'cursor': this field MUST include the CBOR simple value "null" (0xf6).
 
-* 'more': this fields MUST include the CBOR simple value False.
+* 'more': this field MUST include the CBOR simple value "false" (0xf4).
 
 ### Cursor Not Specified in the Diff Query Request {#sec-cursor-pattern-response-to-no-cursor-request}
 
@@ -842,21 +844,21 @@ If the update collection associated with the requester is not empty and the diff
 
 The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
-* 'diff': this field MUST include a CBOR array, containing L = min(U, MAX_DIFF_BATCH) diff entries. In particular, the CBOR array is populated as follows.
+* 'diff-set': this field MUST include a CBOR array, containing L = min(U, MAX_DIFF_BATCH) diff entries. In particular, the CBOR array is populated as follows.
 
    - If U <= MAX_DIFF_BATCH, these diff entries are the last series items in the collection associated with the requester, corresponding to the L most recent TRL updates pertaining to the requester.
 
    - If U > MAX_DIFF_BATCH, these diff entries are the eldest of the last U series items in the collection associated with the requester, as corresponding to the first L of the U most recent TRL updates pertaining to the requester.
 
-   The 'diff' CBOR array as well as the individual diff entries have the same format specified in {{cddl-diff}} and used for the response payload defined in {{ssec-trl-diff-query}}.
+   The 'diff-set' CBOR array as well as the individual diff entries have the same format specified in {{cddl-diff}} and used for the response payload defined in {{ssec-trl-diff-query}}.
 
-* 'cursor': this field MUST include a CBOR unsigned integer. This takes the 'index' value of the series element of the collection included as first diff entry in the 'diff' CBOR array. That is, it takes the 'index' value of the series item in the collection corresponding to the most recent update pertaining to the requester and returned in this diff query response.
+* 'cursor': this field MUST include a CBOR unsigned integer. This takes the 'index' value of the series element of the collection included as first diff entry in the 'diff-set' CBOR array. That is, it takes the 'index' value of the series item in the collection corresponding to the most recent update pertaining to the requester and returned in this diff query response.
 
    Note that 'cursor' takes the same 'index' value of the last series item in the collection when U <= MAX_DIFF_BATCH.
 
-* 'more': this field MUST include the CBOR simple value False if U <= MAX_DIFF_BATCH, or the CBOR simple value True otherwise.
+* 'more': this field MUST include the CBOR simple value "false" (0xf4) if U <= MAX_DIFF_BATCH, or the CBOR simple value "true" (0xf5) otherwise.
 
-   If 'more' has value True, the requester can send a follow-up diff query request including the query parameter 'cursor', with the same value of the 'cursor' field included in this diff query response. As defined in {{sec-cursor-pattern-response-to-with-cursor-request}}, this would result in the Authorization Server transferring the following subset of series items as diff entries, i.e., resuming from where interrupted in the previous transfer.
+   If 'more' has value "true", the requester can send a follow-up diff query request including the query parameter 'cursor', with the same value of the 'cursor' field included in this diff query response. As defined in {{sec-cursor-pattern-response-to-with-cursor-request}}, this would result in the Authorization Server transferring the following subset of series items as diff entries, i.e., resuming from where interrupted in the previous transfer.
 
 ### Cursor Specified in the Diff Query Request {#sec-cursor-pattern-response-to-with-cursor-request}
 
@@ -868,13 +870,13 @@ If the update collection associated with the requester is not empty and the diff
 
    The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
-    - 'diff': this field MUST include an empty CBOR array.
+    - 'diff-set': this field MUST include an empty CBOR array.
 
-    - 'cursor': this field MUST include the CBOR simple value Null.
+    - 'cursor': this field MUST include the CBOR simple value "null" (0xf6).
 
-    - 'more': this field MUST include the CBOR simple value True.
+    - 'more': this field MUST include the CBOR simple value "true" (0xf5).
 
-   With the combination ('cursor', 'more') = (Null, True), the Authorization Server is signaling that the update collection is in fact not empty, but that some series items have been lost due to their removal, including the item with 'index' value P that the requester wished to use as reference point.
+   With the combination ('cursor', 'more') = ("null", "true"), the Authorization Server is signaling that the update collection is in fact not empty, but that some series items have been lost due to their removal, including the item with 'index' value P that the requester wished to use as reference point.
 
    When receiving this diff query response, the requester should send a new full query request to the Authorization Server, in order to fully retrieve the current pertaining portion of the TRL.
 
@@ -882,7 +884,7 @@ If the update collection associated with the requester is not empty and the diff
 
    The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
-   - 'diff': this field MUST include a CBOR array, containing L = min(SUB_U, MAX_DIFF_BATCH) diff entries, where SUB_U = min(NUM, SUB_SIZE), and SUB_SIZE is the number of series items in the collection following the series item X.
+   - 'diff-set': this field MUST include a CBOR array, containing L = min(SUB_U, MAX_DIFF_BATCH) diff entries, where SUB_U = min(NUM, SUB_SIZE), and SUB_SIZE is the number of series items in the collection following the series item X.
 
       That is, these are the L updates pertaining to the requester that immediately follow the series item X indicated as reference point. In particular, the CBOR array is populated as follows.
 
@@ -890,52 +892,54 @@ If the update collection associated with the requester is not empty and the diff
 
       - If SUB_U > MAX_DIFF_BATCH, these diff entries are the eldest of the last SUB_U series items in the collection associated with the requester, corresponding to the first L of the SUB_U most recent TRL updates pertaining to the requester.
 
-      The 'diff' CBOR array as well as the individual diff entries have the same format specified in {{cddl-diff}} and used for the response payload defined in {{ssec-trl-diff-query}}.
+      The 'diff-set' CBOR array as well as the individual diff entries have the same format specified in {{cddl-diff}} and used for the response payload defined in {{ssec-trl-diff-query}}.
 
    - 'cursor': this field MUST include a CBOR unsigned integer. In particular:
 
       - If L is equal to 0, i.e., the series item X is the last one in the collection, 'cursor' takes the same 'index' value of the last series item in the collection.
 
-      - If L is different than 0, 'cursor' takes the 'index' value of the series element of the collection included as first diff entry in the 'diff' CBOR array. That is, it takes the 'index' value of the series item in the collection corresponding to the most recent update pertaining to the requester and returned in this diff query response.
+      - If L is different than 0, 'cursor' takes the 'index' value of the series element of the collection included as first diff entry in the 'diff-set' CBOR array. That is, it takes the 'index' value of the series item in the collection corresponding to the most recent update pertaining to the requester and returned in this diff query response.
 
       Note that 'cursor' takes the same 'index' value of the last series item in the collection when SUB_U <= MAX_DIFF_BATCH.
 
-   - 'more': this field MUST include the CBOR simple value False if SUB_U <= MAX_DIFF_BATCH, or the CBOR simple value True otherwise.
+   - 'more': this field MUST include the CBOR simple value "false" (0xf4) if SUB_U <= MAX_DIFF_BATCH, or the CBOR simple value "true" (0xf5) otherwise.
 
-      If 'more' has value True, the requester can send a follow-up diff query request including the query parameter 'cursor', with the same value of the 'cursor' field specified in this diff query response. This would result in the Authorization Server transferring the following subset of series items as diff entries, i.e., resuming from where interrupted in the previous transfer.
+      If 'more' has value "true", the requester can send a follow-up diff query request including the query parameter 'cursor', with the same value of the 'cursor' field specified in this diff query response. This would result in the Authorization Server transferring the following subset of series items as diff entries, i.e., resuming from where interrupted in the previous transfer.
 
 ### TRL Parameters # {#trl-registry-parameters}
+
+RFC EDITOR: Throughout this section, please replace \[this document\] with the RFC number of this specification and remove this note.
 
 This specification defines a number of fields used in the response to a diff query request to the TRL endpoint relying on the "Cursor" pattern, as defined in {{sec-cursor-pattern}}.
 
 The table below summarizes them, and specifies the CBOR value to use as abbreviation instead of the full descriptive name. Note that the Content-Format "application/ace-trl+cbor" defined in {{iana-content-type}} of this specification MUST be used when these fields are transported.
 
 ~~~~~~~~~~~
-+--------+------------+---------------------+-----------+
-| Name   | CBOR Value | CBOR Type           | Reference |
-+--------+------------+---------------------+-----------+
-| trl    | TBD        | array               | [this     |
-|        |            |                     | document] |
-+--------+------------+---------------------+-----------+
-| cursor | TBD        | simple value null / | [this     |
-|        |            | unsigned integer    | document] |
-+--------+------------+---------------------+-----------+
-| diff   | TBD        | array               | [this     |
-|        |            |                     | document] |
-+--------+------------+---------------------+-----------+
-| more   | TBD        | simple value True   | [this     |
-|        |            | or False            | document] |
-+--------+------------+---------------------+-----------+
++----------+------------+-----------------------+-----------+
+| Name     | CBOR Value | CBOR Type             | Reference |
++----------+------------+-----------------------+-----------+
+| full-set | TBD        | array                 | [this     |
+|          |            |                       | document] |
++----------+------------+-----------------------+-----------+
+| cursor   | TBD        | simple value "null" / | [this     |
+|          |            | unsigned integer      | document] |
++----------+------------+-----------------------+-----------+
+| diff-set | TBD        | array                 | [this     |
+|          |            |                       | document] |
++----------+------------+-----------------------+-----------+
+| more     | TBD        | simple value "true"   | [this     |
+|          |            | or "false"            | document] |
++----------+------------+-----------------------+-----------+
 ~~~~~~~~~~~
 {: #fig-cbor-trl-params title="CBOR abbreviations for TRL parameters" artwork-align="center"}
 
 # Document Updates # {#sec-document-updates}
 
-RFC EDITOR: PLEASE REMOVE THIS SECTION.
+RFC EDITOR: Please remove this section.
 
 ## Version -00 to -01 ## {#sec-0-01}
 
-* Editorial improvements.
+* Clarifications and editorial improvements.
 
 # Acknowledgments # {#acknowldegment}
 {: numbered="no"}
