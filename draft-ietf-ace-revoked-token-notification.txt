@@ -756,6 +756,35 @@ Table of Contents
    When doing so, the caller of the TRL endpoint can perform a full
    query (see Section 6) or a diff query (see Section 7).
 
+   When receiving a response from the TRL endpoint, a registered device
+   MUST expunge every stored Access Token associated to a token hash
+   specified in the response.
+
+   When a Resource Server RS receives a response from the TRL endpoint
+   specifying the token hash H associated to a certain revoked Access
+   Token, the RS might not have received and stored that Access Token
+   yet.  This occurs if the Access Token is revoked before it is
+   successfully posted to the Authorization Information Endpoint at the
+   RS (see Section 5.10.1 of [I-D.ietf-ace-oauth-authz]).  Such a delay
+   can be due, for example, to messages that get lost in transmission,
+   or rather to the Client experiencing failures in sending or
+   deliberately holding the Access Token back.
+
+   In such a case, the RS performs the following actions.
+
+   *  The RS MUST store the token hash H, until gaining knowledge that
+      the associated revoked Access Token is also expired.
+
+      This can happen when receiving a subsequent response from the TRL
+      endpoint (i.e., indicating that the token hash is not in the TRL
+      portion pertaining to the RS anymore), or when the Access Token is
+      posted to the Authorization Information Endpoint and is found to
+      be expired based on its 'exp' claim [RFC7519], if included.
+
+   *  The RS MUST NOT accept as valid and store an Access Token posted
+      to the Authorization Information Endpoint, if the corresponding
+      token hash H is among the stored ones.
+
 10.  Interaction Examples
 
    This section provides examples of interactions between a Resource
@@ -1636,6 +1665,9 @@ Appendix B.  Document Updates
    RFC EDITOR: Please remove this section.
 
 B.1.  Version -00 to -01
+
+   *  Added actions to perform upon receiving responses from the TRL
+      endpoint.
 
    *  Section restructuring (full- and diff-query as self-standing
       sections; usage of series transfer pattern moved to the document
