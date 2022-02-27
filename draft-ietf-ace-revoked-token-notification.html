@@ -1020,7 +1020,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 24 August 2022</td>
+<td class="center">Expires 31 August 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1033,12 +1033,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-ace-revoked-token-notification-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-02-20" class="published">20 February 2022</time>
+<time datetime="2022-02-27" class="published">27 February 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-08-24">24 August 2022</time></dd>
+<dd class="expires"><time datetime="2022-08-31">31 August 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1099,7 +1099,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 24 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1247,10 +1247,18 @@ svg [stroke="fill"], svg [fill^="#fff"] {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-C" class="xref"></a><a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-C" class="xref">Appendix C</a>.  <a href="#name-document-updates" class="xref">Document Updates</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
+                <p id="section-toc.1-1.14.2.1.1"><a href="#appendix-C.1" class="xref">C.1</a>.  <a href="#name-version-00-to-01" class="xref">Version -00 to -01</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-D" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#appendix-D" class="xref"></a><a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-E" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1284,7 +1292,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </li>
           <li class="normal" id="section-1.1-6.3">TRL resource: a resource on the Authorization Server, with a TRL as its representation.<a href="#section-1.1-6.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-1.1-6.4">TRL endpoint: an endpoint at the Authorization Server associated to the TRL resource. The default name of the TRL endpoint in a url-path is '/revoke/trl'. Implementations are not required to use this name, and can define their own instead.<a href="#section-1.1-6.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-6.4">TRL endpoint: an endpoint at the Authorization Server associated with the TRL resource. The default name of the TRL endpoint in a url-path is '/revoke/trl'. Implementations are not required to use this name, and can define their own instead.<a href="#section-1.1-6.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-1.1-6.5">Registered device: a device registered at the Authorization Server, i.e., as a Client, or a Resource Server, or both. A registered device acts as caller of the TRL endpoint.<a href="#section-1.1-6.5" class="pilcrow">¶</a>
 </li>
@@ -1333,7 +1341,7 @@ Further Observe Notifications may be sent, consistently with ongoing additional 
         <li class="normal" id="section-2-3.4">An administrator can access and subscribe to the TRL like a registered device, while getting the full updated representation of the TRL.<a href="#section-2-3.4" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-2-4"><a href="#fig-protocol-overview" class="xref">Figure 1</a> shows a high-level overview of the service provided by this protocol. In particular, it shows the Observe Notifications sent by the Authorization Server to one administrator and four registered devices, upon revocation of the issued Access Tokens t1, t2 and t3, with token hash th1, th2 and th3, respectively. Each dotted line associated to a pair of registered devices indicates the Access Token that they both own.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-4"><a href="#fig-protocol-overview" class="xref">Figure 1</a> shows a high-level overview of the service provided by this protocol. In particular, it shows the Observe Notifications sent by the Authorization Server to one administrator and four registered devices, upon revocation of the issued Access Tokens t1, t2 and t3, with token hash th1, th2 and th3, respectively. Each dotted line associated with a pair of registered devices indicates the Access Token that they both own.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <span id="name-protocol-overview-2"></span><div id="fig-protocol-overview">
 <figure id="figure-1">
         <div class="alignCenter art-text artwork" id="section-2-5.1">
@@ -1489,13 +1497,13 @@ Payload:
         <li class="normal" id="section-5-4.2">
           <p id="section-5-4.2.1">Diff query: the Authorization Server returns a list of diff entries. Each diff entry is related to one of the most recent updates, in the portion of the TRL pertaining to the requester. The Authorization Server MAY support this type of query.<a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
 <p id="section-5-4.2.2">
-The entry associated to one of such updates contains a list of token hashes, such that: i) the corresponding revoked Access Tokens pertain to the requester; and ii) they were added to or removed from the TRL at that update. The processing of a diff query and the related response format are defined in <a href="#ssec-trl-diff-query" class="xref">Section 5.2</a>.<a href="#section-5-4.2.2" class="pilcrow">¶</a></p>
+The entry associated with one of such updates contains a list of token hashes, such that: i) the corresponding revoked Access Tokens pertain to the requester; and ii) they were added to or removed from the TRL at that update. The processing of a diff query and the related response format are defined in <a href="#ssec-trl-diff-query" class="xref">Section 5.2</a>.<a href="#section-5-4.2.2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-5-5">The TRL endpoint allows the following query parameter in a GET request.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-6.1">
-          <p id="section-5-6.1.1">'pmax': if included, it follows the semantics defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-conditional-attributes-01#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#I-D.ietf-core-conditional-attributes" class="xref">I-D.ietf-core-conditional-attributes</a>]</span>. This query parameter is relevant only in case the GET request is specifically an Observation Request, i.e., if it includes the CoAP Observe option set to 0 (register). In such a case, this parameter indicates the maximum time, in seconds, between two consecutive notifications for the observation in question, regardless whether the TRL resource has changed or not.<a href="#section-5-6.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-6.1.1">'pmax': if included, it follows the semantics defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-conditional-attributes-02#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#I-D.ietf-core-conditional-attributes" class="xref">I-D.ietf-core-conditional-attributes</a>]</span>. This query parameter is relevant only in case the GET request is specifically an Observation Request, i.e., if it includes the CoAP Observe option set to 0 (register). In such a case, this parameter indicates the maximum time, in seconds, between two consecutive notifications for the observation in question, regardless whether the TRL resource has changed or not.<a href="#section-5-6.1.1" class="pilcrow">¶</a></p>
 <p id="section-5-6.1.2">
 If the Observation Request does not include the 'pmax' parameter, the maximum time to consider is up to the Authorization Server. If the Observation Request includes the 'pmax' parameter, its value MUST be greater than zero, otherwise the Authorization Server MUST return a 4.00 (Bad Request) response.<a href="#section-5-6.1.2" class="pilcrow">¶</a></p>
 <p id="section-5-6.1.3">
@@ -1562,9 +1570,9 @@ The order of the token hashes in the CBOR array is irrelevant, i.e., the CBOR ar
 <p id="section-5.2-2.2.2">
 Each diff entry is a CBOR array 'diff-entry', which includes the following two elements.<a href="#section-5.2-2.2.2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-2.2.3.1">The first element is a CBOR array 'removed'. Each element of the array is a CBOR byte string, with value the token hash of an Access Token such that: it pertained to the requester; and it was removed from the TRL during the update associated to the diff entry.<a href="#section-5.2-2.2.3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.2-2.2.3.1">The first element is a CBOR array 'removed'. Each element of the array is a CBOR byte string, with value the token hash of an Access Token such that: it pertained to the requester; and it was removed from the TRL during the update associated with the diff entry.<a href="#section-5.2-2.2.3.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-5.2-2.2.3.2">The second element is a CBOR array 'added'. Each element of the array is a CBOR byte string, with value the token hash of an Access Token such that: it pertains to the requester; and it was added to the TRL during the update associated to the diff entry.<a href="#section-5.2-2.2.3.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-5.2-2.2.3.2">The second element is a CBOR array 'added'. Each element of the array is a CBOR byte string, with value the token hash of an Access Token such that: it pertains to the requester; and it was added to the TRL during the update associated with the diff entry.<a href="#section-5.2-2.2.3.2" class="pilcrow">¶</a>
 </li>
             </ul>
 <p id="section-5.2-2.2.4">
@@ -1955,7 +1963,7 @@ RS                                            AS
 <p id="section-9-1">Security considerations are inherited from the ACE framework for Authentication and Authorization <span>[<a href="#I-D.ietf-ace-oauth-authz" class="xref">I-D.ietf-ace-oauth-authz</a>]</span>, from <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span> as to the usage of CWTs, from <span>[<a href="#RFC7519" class="xref">RFC7519</a>]</span> as to the usage of JWTs, from <span>[<a href="#RFC7641" class="xref">RFC7641</a>]</span> as to the usage of CoAP Observe, and from <span>[<a href="#RFC6920" class="xref">RFC6920</a>]</span> with regard to resource naming through hashes. The following considerations also apply.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">The Authorization Server MUST ensure that each registered device can access and retrieve only its pertaining portion of the TRL. To this end, the Authorization Server can perform the required filtering based on the authenticated identity of the registered device, i.e., a (non-public) identifier that the Authorization Server can securely relate to the registered device and the secure association they use to communicate.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <p id="section-9-3">Disclosing any information about revoked Access Tokens to entities other than the intended registered devices may result in privacy concerns. Therefore, the Authorization Server MUST ensure that, other than registered devices accessing their own pertaining portion of the TRL, only authorized and authenticated administrators can retrieve the full TRL. To this end, the Authorization Server may rely on an access control list or similar.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">If a registered device has many non-expired Access Tokens associated to itself that are revoked, the pertaining portion of the TRL could grow to a size bigger than what the registered device is prepared to handle upon reception, especially if relying on a full query of the TRL resource (see <a href="#ssec-trl-full-query" class="xref">Section 5.1</a>). This could be exploited by attackers to negatively affect the behavior of a registered device. Issuing Access Tokens with not too long expiration time could help reduce the size of a TRL, but an Authorization Server SHOULD take measures to limit this size.<a href="#section-9-4" class="pilcrow">¶</a></p>
+<p id="section-9-4">If a registered device has many non-expired Access Tokens associated with itself that are revoked, the pertaining portion of the TRL could grow to a size bigger than what the registered device is prepared to handle upon reception, especially if relying on a full query of the TRL resource (see <a href="#ssec-trl-full-query" class="xref">Section 5.1</a>). This could be exploited by attackers to negatively affect the behavior of a registered device. Issuing Access Tokens with not too long expiration time could help reduce the size of a TRL, but an Authorization Server SHOULD take measures to limit this size.<a href="#section-9-4" class="pilcrow">¶</a></p>
 <p id="section-9-5">Most of the communication about revoked Access Tokens presented in this specification relies on CoAP Observe Notifications sent from the Authorization Server to a registered device. The suppression of those notifications by an external attacker that has access to the network would prevent registered devices from ever knowing that their pertaining Access Tokens have been revoked. To avoid this, a registered device SHOULD NOT rely solely on the CoAP Observe notifications. In particular, a registered device SHOULD also regularly poll the Authorization Server for the most current information about revoked Access Tokens, by sending GET requests to the TRL endpoint according to a related application policy.<a href="#section-9-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2123,7 +2131,7 @@ registry has been created to use the "Expert Review" registration procedure <spa
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-conditional-attributes">[I-D.ietf-core-conditional-attributes]</dt>
         <dd>
-<span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Soloway, A.</span>, and <span class="refAuthor">B. Silverajan</span>, <span class="refTitle">"Conditional Attributes for Constrained RESTful Environments"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-conditional-attributes-01</span>, <time datetime="2022-01-13" class="refDate">13 January 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-conditional-attributes-01.txt">https://www.ietf.org/archive/id/draft-ietf-core-conditional-attributes-01.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Soloway, A.</span>, and <span class="refAuthor">B. Silverajan</span>, <span class="refTitle">"Conditional Attributes for Constrained RESTful Environments"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-conditional-attributes-02</span>, <time datetime="2022-02-24" class="refDate">24 February 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-conditional-attributes-02.txt">https://www.ietf.org/archive/id/draft-ietf-core-conditional-attributes-02.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7009">[RFC7009]</dt>
       <dd>
@@ -2147,12 +2155,12 @@ registry has been created to use the "Expert Review" registration procedure <spa
 </li>
         <li id="appendix-A-4.3">The Authorization Server fills the two sets with the token hashes of the removed and added Access Tokens, respectively, from/to the TRL portion from step 1.<a href="#appendix-A-4.3" class="pilcrow">¶</a>
 </li>
-        <li id="appendix-A-4.4">The Authorization Server creates a new series item including the two sets from step 3, and adds the series item to the update collection associated to the registered device.<a href="#appendix-A-4.4" class="pilcrow">¶</a>
+        <li id="appendix-A-4.4">The Authorization Server creates a new series item including the two sets from step 3, and adds the series item to the update collection associated with the registered device.<a href="#appendix-A-4.4" class="pilcrow">¶</a>
 </li>
       </ol>
-<p id="appendix-A-5">When responding to a diff query request from a registered device (see <a href="#ssec-trl-diff-query" class="xref">Section 5.2</a>), 'diff' is a subset of the collection associated to the requester, where each 'diff_entry' record is a series item from that collection. Note that 'diff' specifies the whole current collection when the value of U is equal to SIZE, i.e., the current number of series items in the collection.<a href="#appendix-A-5" class="pilcrow">¶</a></p>
+<p id="appendix-A-5">When responding to a diff query request from a registered device (see <a href="#ssec-trl-diff-query" class="xref">Section 5.2</a>), 'diff' is a subset of the collection associated with the requester, where each 'diff_entry' record is a series item from that collection. Note that 'diff' specifies the whole current collection when the value of U is equal to SIZE, i.e., the current number of series items in the collection.<a href="#appendix-A-5" class="pilcrow">¶</a></p>
 <p id="appendix-A-6">The value N of the 'diff' query parameter in the diff query request allows the requester and the Authorization Server to trade the amount of provided information with the latency of the information transfer.<a href="#appendix-A-6" class="pilcrow">¶</a></p>
-<p id="appendix-A-7">Since the collection associated to each registered device includes up to N_MAX series item, the Authorization Server deletes the oldest series item when a new one is generated and added to the end of the collection, due to a new TRL update pertaining to that registered device. This addresses the question "When can the server decide to no longer retain older items?" in <span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-stp-03#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.bormann-t2trg-stp" class="xref">I-D.bormann-t2trg-stp</a>]</span>.<a href="#appendix-A-7" class="pilcrow">¶</a></p>
+<p id="appendix-A-7">Since the collection associated with each registered device includes up to N_MAX series item, the Authorization Server deletes the oldest series item when a new one is generated and added to the end of the collection, due to a new TRL update pertaining to that registered device. This addresses the question "When can the server decide to no longer retain older items?" in <span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-stp-03#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.bormann-t2trg-stp" class="xref">I-D.bormann-t2trg-stp</a>]</span>.<a href="#appendix-A-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-cursor-pattern">
@@ -2161,8 +2169,8 @@ registry has been created to use the "Expert Review" registration procedure <spa
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-usage-of-the-cursor-pattern" class="section-name selfRef">Usage of the "Cursor" Pattern</a>
       </h2>
 <p id="appendix-B-1">Building on <a href="#sec-series-pattern" class="xref">Appendix A</a>, this section describes how the diff query of the TRL defined in <a href="#ssec-trl-diff-query" class="xref">Section 5.2</a> can be further improved by using the "Cursor" pattern of the Series Transfer Pattern (see <span><a href="https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-stp-03#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.bormann-t2trg-stp" class="xref">I-D.bormann-t2trg-stp</a>]</span>).<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">This has two benefits. First, the Authorization Server can avoid excessively big latencies when several diff entries have to be transferred, by delivering one adjacent subset at the time, in different diff query responses. Second, a requester can retrieve diff entries associated to TRL updates that, even if not the most recent ones, occurred after a TRL update indicated as reference point.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
-<p id="appendix-B-3">To this end, each series item in an update collection is also associated to an unsigned integer 'index', with value the absolute counter of series items added to that collection minus 1. That is, the first series item added to a collection has 'index' with value 0. Then, the values of 'index' are used as cursor information.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">This has two benefits. First, the Authorization Server can avoid excessively big latencies when several diff entries have to be transferred, by delivering one adjacent subset at the time, in different diff query responses. Second, a requester can retrieve diff entries associated with TRL updates that, even if not the most recent ones, occurred after a TRL update indicated as reference point.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">To this end, each series item in an update collection is also associated with an unsigned integer 'index', with value the absolute counter of series items added to that collection minus 1. That is, the first series item added to a collection has 'index' with value 0. Then, the values of 'index' are used as cursor information.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 <p id="appendix-B-4">Furthermore, the Authorization Server defines an unsigned integer MAX_DIFF_BATCH &lt;= N_MAX, specifying the maximum number of diff entries to be included in a single diff query response. If supporting diff queries, the Authorization Server SHOULD provide registered devices and administrators with the value of MAX_DIFF_BATCH, upon their registration (see <a href="#sec-registration" class="xref">Section 6</a>).<a href="#appendix-B-4" class="pilcrow">¶</a></p>
 <p id="appendix-B-5">Finally, the full query and diff query exchanges defined in <a href="#ssec-trl-full-query" class="xref">Section 5.1</a> and <a href="#ssec-trl-diff-query" class="xref">Section 5.2</a> are extended as follows.<a href="#appendix-B-5" class="pilcrow">¶</a></p>
 <p id="appendix-B-6">In particular, successul responses from the TRL endpoint MUST use the Content-Format "application/ace-trl+cbor" defined in <a href="#iana-content-type" class="xref">Section 10.2</a> of this specification.<a href="#appendix-B-6" class="pilcrow">¶</a></p>
@@ -2212,7 +2220,7 @@ Otherwise, the field MUST include a CBOR unsigned integer, encoding the 'index' 
           <h4 id="name-empty-collection">
 <a href="#appendix-B.4.1" class="section-number selfRef">B.4.1. </a><a href="#name-empty-collection" class="section-name selfRef">Empty Collection</a>
           </h4>
-<p id="appendix-B.4.1-1">If the collection associated to the requester has no elements, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.4.1-1">If the collection associated with the requester has no elements, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.1-2">The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in <a href="#trl-registry-parameters" class="xref">Appendix B.4.4</a>.<a href="#appendix-B.4.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B.4.1-3.1">'diff': this field MUST include an empty CBOR array.<a href="#appendix-B.4.1-3.1" class="pilcrow">¶</a>
@@ -2229,15 +2237,15 @@ Otherwise, the field MUST include a CBOR unsigned integer, encoding the 'index' 
           <h4 id="name-cursor-not-specified-in-the">
 <a href="#appendix-B.4.2" class="section-number selfRef">B.4.2. </a><a href="#name-cursor-not-specified-in-the" class="section-name selfRef">Cursor Not Specified in the Diff Query Request</a>
           </h4>
-<p id="appendix-B.4.2-1">If the update collection associated to the requester is not empty and the diff query request does not include the query parameter 'cursor', the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.4.2-1">If the update collection associated with the requester is not empty and the diff query request does not include the query parameter 'cursor', the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.2-2">The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in <a href="#trl-registry-parameters" class="xref">Appendix B.4.4</a>.<a href="#appendix-B.4.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B.4.2-3.1">
               <p id="appendix-B.4.2-3.1.1">'diff': this field MUST include a CBOR array, containing L = min(U, MAX_DIFF_BATCH) diff entries. In particular, the CBOR array is populated as follows.<a href="#appendix-B.4.2-3.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B.4.2-3.1.2.1">If U &lt;= MAX_DIFF_BATCH, these diff entries are the last series items in the collection associated to the requester, corresponding to the L most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.2-3.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.4.2-3.1.2.1">If U &lt;= MAX_DIFF_BATCH, these diff entries are the last series items in the collection associated with the requester, corresponding to the L most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.2-3.1.2.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="appendix-B.4.2-3.1.2.2">If U &gt; MAX_DIFF_BATCH, these diff entries are the eldest of the last U series items in the collection associated to the requester, as corresponding to the first L of the U most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.2-3.1.2.2" class="pilcrow">¶</a>
+                <li class="normal" id="appendix-B.4.2-3.1.2.2">If U &gt; MAX_DIFF_BATCH, these diff entries are the eldest of the last U series items in the collection associated with the requester, as corresponding to the first L of the U most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.2-3.1.2.2" class="pilcrow">¶</a>
 </li>
               </ul>
 <p id="appendix-B.4.2-3.1.3">
@@ -2261,12 +2269,12 @@ If 'more' has value True, the requester can send a follow-up diff query request 
           <h4 id="name-cursor-specified-in-the-dif">
 <a href="#appendix-B.4.3" class="section-number selfRef">B.4.3. </a><a href="#name-cursor-specified-in-the-dif" class="section-name selfRef">Cursor Specified in the Diff Query Request</a>
           </h4>
-<p id="appendix-B.4.3-1">If the update collection associated to the requester is not empty and the diff query request includes the query parameter 'cursor' with value P, the Authorization Server proceeds as follows.<a href="#appendix-B.4.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.4.3-1">If the update collection associated with the requester is not empty and the diff query request includes the query parameter 'cursor' with value P, the Authorization Server proceeds as follows.<a href="#appendix-B.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B.4.3-2.1">The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies a value other than 0 or than a positive integer.<a href="#appendix-B.4.3-2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="appendix-B.4.3-2.2">
-              <p id="appendix-B.4.3-2.2.1">If no series item X with 'index' having value P is found in the collection associated to the requester, then that item has been previously removed from the history of updates for that requester (see <a href="#sec-series-pattern" class="xref">Appendix A</a>). In this case, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.3-2.2.1" class="pilcrow">¶</a></p>
+              <p id="appendix-B.4.3-2.2.1">If no series item X with 'index' having value P is found in the collection associated with the requester, then that item has been previously removed from the history of updates for that requester (see <a href="#sec-series-pattern" class="xref">Appendix A</a>). In this case, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.3-2.2.1" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.3-2.2.2">
 The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in <a href="#trl-registry-parameters" class="xref">Appendix B.4.4</a>.<a href="#appendix-B.4.3-2.2.2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2283,7 +2291,7 @@ With the combination ('cursor', 'more') = (Null, True), the Authorization Server
 When receiving this diff query response, the requester should send a new full query request to the Authorization Server, in order to fully retrieve the current pertaining portion of the TRL.<a href="#appendix-B.4.3-2.2.5" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-B.4.3-2.3">
-              <p id="appendix-B.4.3-2.3.1">If the series item X with 'index' having value P is found in the collection associated to the requester, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.3-2.3.1" class="pilcrow">¶</a></p>
+              <p id="appendix-B.4.3-2.3.1">If the series item X with 'index' having value P is found in the collection associated with the requester, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.3-2.3.1" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.3-2.3.2">
 The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in <a href="#trl-registry-parameters" class="xref">Appendix B.4.4</a>.<a href="#appendix-B.4.3-2.3.2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2292,9 +2300,9 @@ The response payload includes a CBOR map with the following fields, whose CBOR l
 <p id="appendix-B.4.3-2.3.3.1.2">
 That is, these are the L updates pertaining to the requester that immediately follow the series item X indicated as reference point. In particular, the CBOR array is populated as follows.<a href="#appendix-B.4.3-2.3.3.1.2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B.4.3-2.3.3.1.3.1">If SUB_U &lt;= MAX_DIFF_BATCH, these diff entries are the last series items in the collection associated to the requester, corresponding to the L most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.3-2.3.3.1.3.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.4.3-2.3.3.1.3.1">If SUB_U &lt;= MAX_DIFF_BATCH, these diff entries are the last series items in the collection associated with the requester, corresponding to the L most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.3-2.3.3.1.3.1" class="pilcrow">¶</a>
 </li>
-                    <li class="normal" id="appendix-B.4.3-2.3.3.1.3.2">If SUB_U &gt; MAX_DIFF_BATCH, these diff entries are the eldest of the last SUB_U series items in the collection associated to the requester, corresponding to the first L of the SUB_U most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.3-2.3.3.1.3.2" class="pilcrow">¶</a>
+                    <li class="normal" id="appendix-B.4.3-2.3.3.1.3.2">If SUB_U &gt; MAX_DIFF_BATCH, these diff entries are the eldest of the last SUB_U series items in the collection associated with the requester, corresponding to the first L of the SUB_U most recent TRL updates pertaining to the requester.<a href="#appendix-B.4.3-2.3.3.1.3.2" class="pilcrow">¶</a>
 </li>
                   </ul>
 <p id="appendix-B.4.3-2.3.3.1.4">
@@ -2359,17 +2367,36 @@ If 'more' has value True, the requester can send a follow-up diff query request 
 </div>
 </section>
 </div>
-<div id="acknowldegment">
+<div id="sec-document-updates">
 <section id="appendix-C">
+      <h2 id="name-document-updates">
+<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-document-updates" class="section-name selfRef">Document Updates</a>
+      </h2>
+<p id="appendix-C-1">RFC EDITOR: PLEASE REMOVE THIS SECTION.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<div id="sec-0-01">
+<section id="appendix-C.1">
+        <h3 id="name-version-00-to-01">
+<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-version-00-to-01" class="section-name selfRef">Version -00 to -01</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-C.1-1.1">Editorial improvements.<a href="#appendix-C.1-1.1" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowldegment">
+<section id="appendix-D">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-C-1">The authors sincerely thank Carsten Bormann, Benjamin Kaduk, Michael Richardson, Jim Schaad, Goeran Selander and Travis Spencer for their comments and feedback.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<p id="appendix-C-2">The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).<a href="#appendix-C-2" class="pilcrow">¶</a></p>
+<p id="appendix-D-1">The authors sincerely thank Carsten Bormann, Benjamin Kaduk, Michael Richardson, Jim Schaad, Goeran Selander and Travis Spencer for their comments and feedback.<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+<p id="appendix-D-2">The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).<a href="#appendix-D-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-D">
+<section id="appendix-E">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
