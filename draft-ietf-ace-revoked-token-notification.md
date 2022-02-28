@@ -391,9 +391,9 @@ The payload of each Observe Notification is formatted as defined in {{ssec-trl-f
 
 Furthermore, an administrator or a registered device can send additional GET requests to the TRL endpoint at any time, in order to retrieve the token hashes of the pertaining revoked Access Tokens. When doing so, the caller of the TRL endpoint can perform a full query (see {{ssec-trl-full-query}}) or a diff query (see {{ssec-trl-diff-query}}).
 
-When receiving a response from the TRL endpoint, a registered device MUST expunge every stored Access Token associated to a token hash specified in the response.
+When receiving a response from the TRL endpoint, a registered device MUST expunge every stored Access Token associated with a token hash specified in the response.
 
-When a Resource Server RS receives a response from the TRL endpoint specifying the token hash H associated to a certain revoked Access Token, the RS might not have received and stored that Access Token yet. This occurs if the Access Token is revoked before it is successfully posted to the Authorization Information Endpoint at the RS (see {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}). Such a delay can be due, for example, to messages that get lost in transmission, or rather to the Client experiencing failures in sending or deliberately holding the Access Token back.
+When a Resource Server RS receives a response from the TRL endpoint specifying the token hash H associated with a certain revoked Access Token, the RS might not have received and stored that Access Token yet. This occurs if the Access Token is revoked before it is successfully posted to the Authorization Information Endpoint at the RS (see {{Section 5.10.1 of I-D.ietf-ace-oauth-authz}}). Such a delay can be due, for example, to messages that get lost in transmission, or rather to the Client experiencing failures in sending or deliberately holding the Access Token back.
 
 In such a case, the RS performs the following actions.
 
@@ -820,6 +820,8 @@ This has two benefits. First, the Authorization Server can avoid excessively big
 
 To this end, each series item in an update collection is also associated with an unsigned integer 'index', with value the absolute counter of series items added to that collection minus 1. That is, the first series item added to a collection has 'index' with value 0. Then, the values of 'index' are used as cursor information.
 
+Within an update collection, the unsigned integer LAST_INDEX denotes the value of 'index' associated with the latest added series item, i.e., the overall number of added series item plus 1.
+
 Furthermore, the Authorization Server defines an unsigned integer MAX_DIFF_BATCH <= N_MAX, specifying the maximum number of diff entries to be included in a single diff query response. If supporting diff queries, the Authorization Server SHOULD provide registered devices and administrators with the value of MAX_DIFF_BATCH, upon their registration (see {{sec-registration}}).
 
 Finally, the full query and diff query exchanges defined in {{ssec-trl-full-query}} and {{ssec-trl-diff-query}} are extended as follows.
@@ -888,7 +890,7 @@ The response payload includes a CBOR map with the following fields, whose CBOR l
 
 If the update collection associated with the requester is not empty and the diff query request includes the query parameter 'cursor' with value P, the Authorization Server proceeds as follows.
 
-* The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies a value other than 0 or than a positive integer.
+* The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies: i) a value other than 0 or than a positive integer; or ii) a value strictly greater than the current LAST_INDEX for the update collection associated with the requester.
 
 * The Authorization Server returns a 2.05 (Content) diff query response formatted as follows, in case the series item X with 'index' having value P and the series item Y with 'index' having value P+1 are both not found in the collection associated with the requester. This occurs when the item Y (and possibly further ones after it) has been previously removed from the history of updates for that requester (see {{sec-series-pattern}}).
 
@@ -966,6 +968,8 @@ RFC EDITOR: Please remove this section.
 * Added actions to perform upon receiving responses from the TRL endpoint.
 
 * Fixed off-by-one error when using the "Cursor" pattern.
+
+* Improved error handling.
 
 * Section restructuring (full- and diff-query as self-standing sections).
 
