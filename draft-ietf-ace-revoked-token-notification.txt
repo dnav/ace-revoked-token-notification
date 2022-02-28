@@ -676,7 +676,7 @@ Table of Contents
    of the TRL.
 
    In case the request is successfully processed, the Authorization
-   Server replies with a response speficying the CoAP response code 2.05
+   Server replies with a response specifying the CoAP response code 2.05
    (Content) and including the CoAP Observe option.  The payload of the
    response is formatted as defined in Section 6 or in Section 7, in
    case the GET yielded the execution of a full query or a diff query of
@@ -1132,7 +1132,7 @@ Table of Contents
    grow to a size bigger than what the registered device is prepared to
    handle upon reception, especially if relying on a full query of the
    TRL resource (see Section 6).  This could be exploited by attackers
-   to negatively affect the behaviour of a registered device.  Issuing
+   to negatively affect the behavior of a registered device.  Issuing
    Access Tokens with not too long expiration time could help reduce the
    size of a TRL, but an Authorization Server SHOULD take measures to
    limit this size.
