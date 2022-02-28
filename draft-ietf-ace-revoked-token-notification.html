@@ -2297,7 +2297,7 @@ If 'more' has value "true", the requester can send a follow-up diff query reques
 <li class="normal" id="appendix-B.4.3-2.1">The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies a value other than 0 or than a positive integer.<a href="#appendix-B.4.3-2.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="appendix-B.4.3-2.2">
-              <p id="appendix-B.4.3-2.2.1">If no series item X with 'index' having value P is found in the collection associated with the requester, then that item has been previously removed from the history of updates for that requester (see <a href="#sec-series-pattern" class="xref">Appendix A</a>). In this case, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.3-2.2.1" class="pilcrow">¶</a></p>
+              <p id="appendix-B.4.3-2.2.1">The Authorization Server returns a 2.05 (Content) diff query response formatted as follows, in case the series item X with 'index' having value P and the series item Y with 'index' having value P+1 are both not found in the collection associated with the requester. This occurs when the item Y (and possibly further ones after it) has been previously removed from the history of updates for that requester (see <a href="#sec-series-pattern" class="xref">Appendix A</a>).<a href="#appendix-B.4.3-2.2.1" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.3-2.2.2">
 The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in <a href="#trl-registry-parameters" class="xref">Appendix B.4.4</a>.<a href="#appendix-B.4.3-2.2.2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2309,12 +2309,12 @@ The response payload includes a CBOR map with the following fields, whose CBOR l
 </li>
               </ul>
 <p id="appendix-B.4.3-2.2.4">
-With the combination ('cursor', 'more') = ("null", "true"), the Authorization Server is signaling that the update collection is in fact not empty, but that some series items have been lost due to their removal, including the item with 'index' value P that the requester wished to use as reference point.<a href="#appendix-B.4.3-2.2.4" class="pilcrow">¶</a></p>
+With the combination ('cursor', 'more') = ("null", "true"), the Authorization Server is signaling that the update collection is in fact not empty, but that one or more series items have been lost due to their removal. These include the item with 'index' value P+1, that the requester wished to obtain as the first one following the specified reference point with 'index' value P.<a href="#appendix-B.4.3-2.2.4" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.3-2.2.5">
 When receiving this diff query response, the requester should send a new full query request to the Authorization Server, in order to fully retrieve the current pertaining portion of the TRL.<a href="#appendix-B.4.3-2.2.5" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-B.4.3-2.3">
-              <p id="appendix-B.4.3-2.3.1">If the series item X with 'index' having value P is found in the collection associated with the requester, the Authorization Server returns a 2.05 (Content) diff query response.<a href="#appendix-B.4.3-2.3.1" class="pilcrow">¶</a></p>
+              <p id="appendix-B.4.3-2.3.1">The Authorization Server returns a 2.05 (Content) diff query response formatted as follows, in case i) the series item X with 'index' having value P is found in the collection associated with the requester; or ii) the series item X is not found and the series item Y with 'index' having value P+1 is found in the collection associated with the requester.<a href="#appendix-B.4.3-2.3.1" class="pilcrow">¶</a></p>
 <p id="appendix-B.4.3-2.3.2">
 The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in <a href="#trl-registry-parameters" class="xref">Appendix B.4.4</a>.<a href="#appendix-B.4.3-2.3.2" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2405,11 +2405,13 @@ If 'more' has value "true", the requester can send a follow-up diff query reques
 <ul class="normal">
 <li class="normal" id="appendix-C.1-1.1">Added actions to perform upon receiving responses from the TRL endpoint.<a href="#appendix-C.1-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.2">Section restructuring (full- and diff-query as self-standing sections).<a href="#appendix-C.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.2">Fixed off-by-one error when using the "Cursor" pattern.<a href="#appendix-C.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.3">Renamed identifiers and CBOR parameters.<a href="#appendix-C.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.3">Section restructuring (full- and diff-query as self-standing sections).<a href="#appendix-C.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-C.1-1.4">Clarifications and editorial improvements.<a href="#appendix-C.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-C.1-1.4">Renamed identifiers and CBOR parameters.<a href="#appendix-C.1-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-C.1-1.5">Clarifications and editorial improvements.<a href="#appendix-C.1-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
