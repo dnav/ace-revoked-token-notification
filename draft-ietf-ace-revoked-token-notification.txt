@@ -95,7 +95,7 @@ Table of Contents
    12. IANA Considerations
      12.1.  Media Type Registrations
      12.2.  CoAP Content-Formats Registry
-     12.3.  ACE Token Revocation List Registry
+     12.3.  ACE Token Revocation List Parameters Registry
      12.4.  Expert Review Instructions
    13. References
      13.1.  Normative References
@@ -1148,14 +1148,14 @@ Table of Contents
 
    Reference: [this document]
 
-12.3.  ACE Token Revocation List Registry
+12.3.  ACE Token Revocation List Parameters Registry
 
-   This specification establishes the "ACE Token Revocation List" IANA
-   registry.  The registry has been created to use the "Expert Review"
-   registration procedure [RFC8126].  Expert review guidelines are
-   provided in Section 12.4.  It should be noted that, in addition to
-   the expert review, some portions of the registry require a
-   specification, potentially a Standards Track RFC, to be supplied as
+   This specification establishes the "ACE Token Revocation List
+   Parameters" IANA registry.  The registry has been created to use the
+   "Expert Review" registration procedure [RFC8126].  Expert review
+   guidelines are provided in Section 12.4.  It should be noted that, in
+   addition to the expert review, some portions of the registry require
+   a specification, potentially a Standards Track RFC, to be supplied as
    well.
 
    The columns of this registry are:
