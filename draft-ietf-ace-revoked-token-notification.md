@@ -885,9 +885,9 @@ Merge what is defined below into the document body.
 
 This has two benefits. First, the Authorization Server can avoid excessively big latencies when several diff entries have to be transferred, by delivering one adjacent subset at the time, in different diff query responses. Second, a requester can retrieve diff entries associated with TRL updates that, even if not the most recent ones, occurred after a TRL update indicated as reference point.
 
-To this end, each series item in an update collection is also associated with an unsigned integer 'index', with value the absolute counter of series items added to that collection minus 1. That is, the first series item added to a collection has 'index' with value 0. Then, the values of 'index' are used as cursor information.
+To this end, each series item X in an update collection is also associated with an unsigned integer 'index', with value the absolute counter of series items added to that collection until and including X, minus 1. That is, the first series item added to a collection has 'index' with value 0. Then, the values of 'index' are used as cursor information.
 
-Within an update collection, the unsigned integer LAST_INDEX denotes the value of 'index' associated with the latest added series item, i.e., the overall number of added series item plus 1.
+Within an update collection, the unsigned integer LAST_INDEX denotes the value of 'index' associated with the latest added series item, i.e., the total number of series items added to the collection minus 1.
 
 Furthermore, the Authorization Server defines an unsigned integer MAX_DIFF_BATCH <= N_MAX, specifying the maximum number of diff entries to be included in a single diff query response. If supporting diff queries, the Authorization Server SHOULD provide registered devices and administrators with the value of MAX_DIFF_BATCH, upon their registration (see {{sec-registration}}).
 
