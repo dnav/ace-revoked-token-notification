@@ -283,7 +283,7 @@ The TRL endpoint supports only the GET method, and allows two types of query of 
 
    The entry associated with one of such updates contains a list of token hashes, such that: i) the corresponding revoked Access Tokens pertain to the requester; and ii) they were added to or removed from the TRL at that update. The processing of a diff query and the related response format are defined in {{ssec-trl-diff-query}}.
 
-The TRL endpoint allows the following query parameter in a GET request.
+The TRL endpoint allows the following query parameters in a GET request. The Authorization Server MUST silently ignore unknown query parameters.
 
 * 'pmax': if included, it follows the semantics defined in {{Section 3.2.2 of I-D.ietf-core-conditional-attributes}}. This query parameter is relevant only in case the GET request is specifically an Observation Request, i.e., if it includes the CoAP Observe option set to 0 (register). In such a case, this parameter indicates the maximum time, in seconds, between two consecutive notifications for the observation in question, regardless whether the TRL resource has changed or not.
 
@@ -296,6 +296,8 @@ The TRL endpoint allows the following query parameter in a GET request.
    - the integer 0, indicating that a (notification) response should include as many diff entries as the Authorization Server can provide in the response; or
 
    - a positive integer greater than 0, indicating the maximum number of diff entries that a (notification) response should include.
+
+   If the Authorization Server does not support diff queries, it ignores the query parameter 'diff' when present in the GET request and proceeds like when processing a full query of the TRL (see {{ssec-trl-full-query}}).
 
 # Full Query of the TRL ## {#ssec-trl-full-query}
 
@@ -353,13 +355,13 @@ If the Authorization Server supports diff queries:
 
 * The Authorization Server MUST return a 4.00 (Bad Request) response in case the query parameter 'diff' of the GET request specifies a value other than 0 or than a positive integer.
 
+   The response MUST have Content-Format "application/ace-trl+cbor". The payload of the response is a CBOR map, which MUST include the 'error' field with value 0 ("Invalid parameter value") and MAY include the 'error_description' field to provide additional context.
+
 * The Authorization Server MUST keep track of N\_MAX most recent updates to the portion of the TRL that pertains to each caller of the TRL endpoint. The particular method to achieve this is implementation-specific.
 
 * When SIZE is equal to N_MAX, and a new TRL update occurs as pertaining to a registered device, the Authorization Server MUST first delete the oldest stored update for that device, before storing this latest update as the most recent one for that device.
 
 * The Authorization Server SHOULD provide registered devices and administrators with the value of N_MAX, upon their registration (see {{sec-registration}}).
-
-If the Authorization Server does not support diff queries, it ignores the query parameter 'diff' in the GET request and proceeds as when processing a full query of the TRL (see {{ssec-trl-full-query}}).
 
 {{sec-series-pattern}} discusses how performing a diff query of the TRL is in fact a usage example of the Series Transfer Pattern defined in {{I-D.bormann-t2trg-stp}}.
 
@@ -681,6 +683,57 @@ RS                                            AS
 ~~~~~~~~~~~
 {: #fig-RS-AS-3 title="Interaction for Full Query with Observation and Diff Query" artwork-align="center"}
 
+
+# ACE Token Revocation List Parameters # {#trl-registry-parameters}
+
+This specification defines a number of parameters that can be transported in the response from the TRL endpoint, when the response payload is encoded as a CBOR map. Note that such a response MUST use the Content-Format "application/ace-trl+cbor" defined in {{iana-content-type}} of this specification.
+
+The table below summarizes them, and specifies the CBOR value to use as abbreviation instead of the full descriptive name.
+
+~~~~~~~~~~~
++-------------------+------------+-----------------------+
+| Name              | CBOR Value | CBOR Type             |
++-------------------+------------+-----------------------+
+| full-set          | TBD        | array                 |
+|                   |            |                       |
++-------------------+------------+-----------------------+
+| cursor            | TBD        | simple value "null" / |
+|                   |            | unsigned integer      |
++-------------------+------------+-----------------------+
+| diff-set          | TBD        | array                 |
+|                   |            |                       |
++-------------------+------------+-----------------------+
+| more              | TBD        | simple value "true"   |
+|                   |            | or "false"            |
++-------------------+------------+-----------------------+
+| error             | TBD        | int                   |
+|                   |            |                       |
++-------------------+------------+-----------------------+
+| error_description | TBD        | tstr                  |
+|                   |            |                       |
++-------------------+------------+-----------------------+
+~~~~~~~~~~~
+{: #fig-cbor-trl-params title="CBOR abbreviations for the ACE Token Revocation List parameters" artwork-align="center"}
+
+
+# ACE Token Revocation List Error Identifiers {#error-types}
+
+This specification defines a number of values that the Authorization Server can include as error identifiers, in the 'error' field of an error response from the TRL endpoint. This applies to error responses whose payload is encoded as a CBOR map and whose Content-Format is "application/ace-trl+cbor".
+
+~~~~~~~~~~~
++-------+---------------------------+
+| Value | Description               |
++-------+---------------------------+
+|   0   | Invalid parameter value   |
++-------+---------------------------+
+|   1   | Invalid set of parameters |
++-------+---------------------------+
+|   2   | Out of bound cursor value |
++-------+---------------------------+
+~~~~~~~~~~~
+{: #fig-ACE-TRL-Error Identifiers title="ACE Token Revocation List Error Identifiers" artwork-align="center"}
+
+
 # Security Considerations # {#sec-security-considerations}
 
 Security considerations are inherited from the ACE framework for Authentication and Authorization {{I-D.ietf-ace-oauth-authz}}, from {{RFC8392}} as to the usage of CWTs, from {{RFC7519}} as to the usage of JWTs, from {{RFC7641}} as to the usage of CoAP Observe, and from {{RFC6920}} with regard to resource naming through hashes. The following considerations also apply.
@@ -701,7 +754,7 @@ This document has the following actions for IANA.
 
 ## Media Type Registrations {#iana-media-type}
 
-IANA is asked to register the 'application/ace-trl+cbor' media type for messages of the protocols defined in this document encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
+IANA is asked to register the media type "application/ace-trl+cbor" for messages of the protocols defined in this document encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
 
 Type name: application
 
@@ -762,11 +815,25 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the item.
 
-This registry has been initially populated with the values from {{fig-cbor-trl-params}} in {{trl-registry-parameters}}.
+This registry has been initially populated by the values in {{trl-registry-parameters}}. The Reference column for all of these entries refers to this document.
+
+## ACE Token Revocation List Errors {#iana-token-revocation-list-errors}
+
+This specification establishes the "ACE Token Revocation List Errors" IANA registry. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{review}}. It should be noted that, in addition to the expert review, some portions of the registry require a specification, potentially a Standards Track RFC, to be supplied as well.
+
+The columns of this registry are:
+
+* Value: The value to be used to identify the error. The value MUST be unique. The value can be a positive integer or a negative integer. Integer values between 0 and 255 are designated as Standards Track Document required. Integer values from 256 to 65535 are designated as Specification Required. Integer values greater than 65535 are designated as expert review. Integer values less than -65536 are marked as private use.
+
+* Description: This field contains a brief description of the error.
+
+* Reference: This field contains a pointer to the public specification defining the error, if one exists.
+
+This registry has been initially populated by the values in {{error-types}}. The Reference column for all of these entries refers to this document.
 
 ## Expert Review Instructions {#review}
 
-The IANA registry established in this document is defined as expert review. This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
+The IANA registries established in this document is defined as expert review. This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
@@ -848,6 +915,8 @@ When sending a 2.05 (Content) response to a full query request (see {{ssec-trl-f
 
 In addition to the query parameter 'diff' (see {{ssec-trl-diff-query}}), the requester can specify a query parameter 'cursor', with value an unsigned integer.
 
+The Authorization Server MUST return a 4.00 (Bad Request) response in case the query parameter 'cursor' is present but the query parameter 'diff' is not present. The response MUST have Content-Format "application/ace-trl+cbor". The payload of the response is a CBOR map, which MUST include the 'error' field with value 1 ("Invalid set of parameters") and MAY include the 'error_description' field to provide additional context.
+
 ## Diff Query Response
 
 The Authorization Server composes a response to a diff query request (see {{ssec-trl-diff-query-extended-req}}) as follows, depending on the parameters specified in the request and on the current status of the update collection for the requester.
@@ -890,7 +959,13 @@ The response payload includes a CBOR map with the following fields, whose CBOR l
 
 If the update collection associated with the requester is not empty and the diff query request includes the query parameter 'cursor' with value P, the Authorization Server proceeds as follows.
 
-* The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies: i) a value other than 0 or than a positive integer; or ii) a value strictly greater than the current LAST_INDEX for the update collection associated with the requester.
+* The Authorization Server MUST return a 4.00 (Bad Request) response in case the query parameter 'cursor' specifies a value other than 0 or than a positive integer.
+
+   The response MUST have Content-Format "application/ace-trl+cbor". The payload of the response is a CBOR map, which MUST include the 'error' field with value 0 ("Invalid parameter value") and MAY include the 'error_description' field to provide additional context.
+
+* The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies a value strictly greater than the current LAST_INDEX for the update collection associated with the requester.
+
+   The response MUST have Content-Format "application/ace-trl+cbor". The payload of the response is a CBOR map, which MUST include the 'error' field with value 2 ("Out of bound cursor value") and MAY include the 'error_description' field to provide additional context.
 
 * The Authorization Server returns a 2.05 (Content) diff query response formatted as follows, in case the series item X with 'index' having value P and the series item Y with 'index' having value P+1 are both not found in the collection associated with the requester. This occurs when the item Y (and possibly further ones after it) has been previously removed from the history of updates for that requester (see {{sec-series-pattern}}).
 
@@ -932,33 +1007,6 @@ If the update collection associated with the requester is not empty and the diff
 
       If 'more' has value "true", the requester can send a follow-up diff query request including the query parameter 'cursor', with the same value of the 'cursor' field specified in this diff query response. This would result in the Authorization Server transferring the following subset of series items as diff entries, i.e., resuming from where interrupted in the previous transfer.
 
-### TRL Parameters # {#trl-registry-parameters}
-
-RFC EDITOR: Throughout this section, please replace \[this document\] with the RFC number of this specification and remove this note.
-
-This specification defines a number of fields used in the response to a diff query request to the TRL endpoint relying on the "Cursor" pattern, as defined in {{sec-cursor-pattern}}.
-
-The table below summarizes them, and specifies the CBOR value to use as abbreviation instead of the full descriptive name. Note that the Content-Format "application/ace-trl+cbor" defined in {{iana-content-type}} of this specification MUST be used when these fields are transported.
-
-~~~~~~~~~~~
-+----------+------------+-----------------------+-----------+
-| Name     | CBOR Value | CBOR Type             | Reference |
-+----------+------------+-----------------------+-----------+
-| full-set | TBD        | array                 | [this     |
-|          |            |                       | document] |
-+----------+------------+-----------------------+-----------+
-| cursor   | TBD        | simple value "null" / | [this     |
-|          |            | unsigned integer      | document] |
-+----------+------------+-----------------------+-----------+
-| diff-set | TBD        | array                 | [this     |
-|          |            |                       | document] |
-+----------+------------+-----------------------+-----------+
-| more     | TBD        | simple value "true"   | [this     |
-|          |            | or "false"            | document] |
-+----------+------------+-----------------------+-----------+
-~~~~~~~~~~~
-{: #fig-cbor-trl-params title="CBOR abbreviations for TRL parameters" artwork-align="center"}
-
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: Please remove this section.
@@ -969,7 +1017,7 @@ RFC EDITOR: Please remove this section.
 
 * Fixed off-by-one error when using the "Cursor" pattern.
 
-* Improved error handling.
+* Improved error handling, with registered error codes.
 
 * Section restructuring (full- and diff-query as self-standing sections).
 
