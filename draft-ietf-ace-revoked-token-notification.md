@@ -361,31 +361,9 @@ If the Authorization Server supports diff queries:
 
 If the Authorization Server does not support diff queries, it ignores the query parameter 'diff' in the GET request and proceeds as when processing a full query of the TRL (see {{ssec-trl-full-query}}).
 
-{{sec-series-pattern}} discusses how the diff query of the TRL is in fact a usage example of the Series Transfer Pattern defined in {{I-D.bormann-t2trg-stp}}.
+{{sec-series-pattern}} discusses how performing a diff query of the TRL is in fact a usage example of the Series Transfer Pattern defined in {{I-D.bormann-t2trg-stp}}.
 
-{{sec-cursor-pattern}} discusses how the diff query of the TRL can be further improved by using the "Cursor" pattern defined in {{Section 3.3 of I-D.bormann-t2trg-stp}}.
-
-## On using the Series Transfer Pattern # {#sec-series-pattern}
-
-The diff query of the TRL defined in {{ssec-trl-diff-query}} is a usage example of the Series Transfer Pattern defined in {{I-D.bormann-t2trg-stp}}.
-
-That is, a diff query enables the transfer of a series of TRL updates, with the Authorization Server specifying U <= N_MAX diff entries as the U most recent  updates to the portion of the TRL pertaining to a registered device.
-
-For each registered device, the Authorization Server maintains an update collection of maximum N_MAX items. Each time the TRL changes, the Authorization Server performs the following operations for each registered device.
-
-1. The Authorization Server considers the portion of the TRL pertaining to that registered device. If the TRL portion is not affected by this TRL update, the Authorization Server stops the processing for that registered device.
-
-2. Otherwise, the Authorization Server creates two sets 'trl_patch' of token hashes, i.e., one  "removed" set and one "added" set, as related to this TRL update.
-
-3. The Authorization Server fills the two sets with the token hashes of the removed and added Access Tokens, respectively, from/to the TRL portion from step 1.
-
-4. The Authorization Server creates a new series item including the two sets from step 3, and adds the series item to the update collection associated with the registered device.
-
-When responding to a diff query request from a registered device (see {{ssec-trl-diff-query}}), 'diff-set' is a subset of the collection associated with the requester, where each 'diff_entry' record is a series item from that collection. Note that 'diff-set' specifies the whole current collection when the value of U is equal to SIZE, i.e., the current number of series items in the collection.
-
-The value N of the query parameter 'diff' in the GET request allows the requester and the Authorization Server to trade the amount of provided information with the latency of the information transfer.
-
-Since the collection associated with each registered device includes up to N_MAX series item, the Authorization Server deletes the oldest series item when a new one is generated and added to the end of the collection, due to a new TRL update pertaining to that registered device. This addresses the question "When can the server decide to no longer retain older items?" in {{Section 3.2 of I-D.bormann-t2trg-stp}}.
+{{sec-cursor-pattern}} discusses how the execution of a diff query of the TRL can be further improved by using the "Cursor" pattern defined in {{Section 3.3 of I-D.bormann-t2trg-stp}}.
 
 # Upon Registration # {#sec-registration}
 
@@ -800,13 +778,35 @@ Expert reviewers should take into consideration the following points:
 
 --- back
 
+# On using the Series Transfer Pattern # {#sec-series-pattern}
+
+Performing a diff query of the TRL as specified in {{ssec-trl-diff-query}} is a usage example of the Series Transfer Pattern defined in {{I-D.bormann-t2trg-stp}}.
+
+That is, a diff query enables the transfer of a series of TRL updates, with the Authorization Server specifying U <= N_MAX diff entries as the U most recent  updates to the portion of the TRL pertaining to a registered device.
+
+For each registered device, the Authorization Server maintains an update collection of maximum N_MAX items. Each time the TRL changes, the Authorization Server performs the following operations for each registered device.
+
+1. The Authorization Server considers the portion of the TRL pertaining to that registered device. If the TRL portion is not affected by this TRL update, the Authorization Server stops the processing for that registered device.
+
+2. Otherwise, the Authorization Server creates two sets 'trl_patch' of token hashes, i.e., one  "removed" set and one "added" set, as related to this TRL update.
+
+3. The Authorization Server fills the two sets with the token hashes of the removed and added Access Tokens, respectively, from/to the TRL portion from step 1.
+
+4. The Authorization Server creates a new series item including the two sets from step 3, and adds the series item to the update collection associated with the registered device.
+
+When responding to a diff query request from a registered device (see {{ssec-trl-diff-query}}), 'diff-set' is a subset of the collection associated with the requester, where each 'diff_entry' record is a series item from that collection. Note that 'diff-set' specifies the whole current collection when the value of U is equal to SIZE, i.e., the current number of series items in the collection.
+
+The value N of the query parameter 'diff' in the GET request allows the requester and the Authorization Server to trade the amount of provided information with the latency of the information transfer.
+
+Since the collection associated with each registered device includes up to N_MAX series item, the Authorization Server deletes the oldest series item when a new one is generated and added to the end of the collection, due to a new TRL update pertaining to that registered device. This addresses the question "When can the server decide to no longer retain older items?" in {{Section 3.2 of I-D.bormann-t2trg-stp}}.
+
 # Usage of the "Cursor" Pattern # {#sec-cursor-pattern}
 
-This section defines how the diff query of the TRL specified in {{ssec-trl-diff-query}} can be extended, by using the "Cursor" pattern of the Series Transfer Pattern (see {{Section 3.3 of I-D.bormann-t2trg-stp}}).
+This section defines how the execution of a diff query of the TRL specified in {{ssec-trl-diff-query}} can be extended, by using the "Cursor" pattern of the Series Transfer Pattern (see {{Section 3.3 of I-D.bormann-t2trg-stp}}).
 
 \[ TODO
 
-Merge what is defined below into the document body. This means:
+Merge what is defined below into the document body.
 
 - What is defined below for "Full Query Response" becomes part of the full query processing in the document body. The successful response payload is a CBOR map if the AS supports both the "Diff Query" mode and the "Cursor" pattern, or just the CBOR array full-set otherwise.
 
@@ -965,7 +965,7 @@ RFC EDITOR: Please remove this section.
 
 * Added actions to perform upon receiving responses from the TRL endpoint.
 
-* Section restructuring (full- and diff-query as self-standing sections; usage of series transfer pattern moved to the document body).
+* Section restructuring (full- and diff-query as self-standing sections).
 
 * Renamed identifiers and CBOR parameters.
 
