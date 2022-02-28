@@ -890,7 +890,7 @@ If the update collection associated with the requester is not empty and the diff
 
 * The Authorization Server MUST return a 4.00 (Bad Request) response in case the 'cursor' parameter specifies a value other than 0 or than a positive integer.
 
-* If no series item X with 'index' having value P is found in the collection associated with the requester, then that item has been previously removed from the history of updates for that requester (see {{sec-series-pattern}}). In this case, the Authorization Server returns a 2.05 (Content) diff query response.
+* The Authorization Server returns a 2.05 (Content) diff query response formatted as follows, in case the series item X with 'index' having value P and the series item Y with 'index' having value P+1 are both not found in the collection associated with the requester. This occurs when the item Y (and possibly further ones after it) has been previously removed from the history of updates for that requester (see {{sec-series-pattern}}).
 
    The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
@@ -900,11 +900,11 @@ If the update collection associated with the requester is not empty and the diff
 
     - 'more': this field MUST include the CBOR simple value "true" (0xf5).
 
-   With the combination ('cursor', 'more') = ("null", "true"), the Authorization Server is signaling that the update collection is in fact not empty, but that some series items have been lost due to their removal, including the item with 'index' value P that the requester wished to use as reference point.
+   With the combination ('cursor', 'more') = ("null", "true"), the Authorization Server is signaling that the update collection is in fact not empty, but that one or more series items have been lost due to their removal. These include the item with 'index' value P+1, that the requester wished to obtain as the first one following the specified reference point with 'index' value P.
 
    When receiving this diff query response, the requester should send a new full query request to the Authorization Server, in order to fully retrieve the current pertaining portion of the TRL.
 
-* If the series item X with 'index' having value P is found in the collection associated with the requester, the Authorization Server returns a 2.05 (Content) diff query response.
+* The Authorization Server returns a 2.05 (Content) diff query response formatted as follows, in case i) the series item X with 'index' having value P is found in the collection associated with the requester; or ii) the series item X is not found and the series item Y with 'index' having value P+1 is found in the collection associated with the requester.
 
    The response payload includes a CBOR map with the following fields, whose CBOR labels are defined in {{trl-registry-parameters}}.
 
@@ -964,6 +964,8 @@ RFC EDITOR: Please remove this section.
 ## Version -00 to -01 ## {#sec-0-01}
 
 * Added actions to perform upon receiving responses from the TRL endpoint.
+
+* Fixed off-by-one error when using the "Cursor" pattern.
 
 * Section restructuring (full- and diff-query as self-standing sections).
 
