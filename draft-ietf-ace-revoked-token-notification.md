@@ -747,9 +747,9 @@ ID: TBD
 
 Reference: \[this document\]
 
-## ACE Token Revocation List Registry ## {#iana-token-revocation-list}
+## ACE Token Revocation List Parameters Registry ## {#iana-token-revocation-list}
 
-This specification establishes the "ACE Token Revocation List" IANA registry. The
+This specification establishes the "ACE Token Revocation List Parameters" IANA registry. The
 registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{review}}. It should be noted that, in addition to the expert review, some portions of the registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
 The columns of this registry are:
