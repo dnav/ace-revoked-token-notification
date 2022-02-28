@@ -706,11 +706,11 @@ Table of Contents
    query (see Section 6) or a diff query (see Section 7).
 
    When receiving a response from the TRL endpoint, a registered device
-   MUST expunge every stored Access Token associated to a token hash
+   MUST expunge every stored Access Token associated with a token hash
    specified in the response.
 
    When a Resource Server RS receives a response from the TRL endpoint
-   specifying the token hash H associated to a certain revoked Access
+   specifying the token hash H associated with a certain revoked Access
    Token, the RS might not have received and stored that Access Token
    yet.  This occurs if the Access Token is revoked before it is
    successfully posted to the Authorization Information Endpoint at the
@@ -1415,6 +1415,10 @@ Appendix B.  Usage of the "Cursor" Pattern
    the first series item added to a collection has 'index' with value 0.
    Then, the values of 'index' are used as cursor information.
 
+   Within an update collection, the unsigned integer LAST_INDEX denotes
+   the value of 'index' associated with the latest added series item,
+   i.e., the overall number of added series item plus 1.
+
    Furthermore, the Authorization Server defines an unsigned integer
    MAX_DIFF_BATCH <= N_MAX, specifying the maximum number of diff
    entries to be included in a single diff query response.  If
@@ -1543,8 +1547,10 @@ B.4.3.  Cursor Specified in the Diff Query Request
    value P, the Authorization Server proceeds as follows.
 
    *  The Authorization Server MUST return a 4.00 (Bad Request) response
-      in case the 'cursor' parameter specifies a value other than 0 or
-      than a positive integer.
+      in case the 'cursor' parameter specifies: i) a value other than 0
+      or than a positive integer; or ii) a value strictly greater than
+      the current LAST_INDEX for the update collection associated with
+      the requester.
 
    *  The Authorization Server returns a 2.05 (Content) diff query
       response formatted as follows, in case the series item X with
@@ -1681,6 +1687,8 @@ C.1.  Version -00 to -01
       endpoint.
 
    *  Fixed off-by-one error when using the "Cursor" pattern.
+
+   *  Improved error handling.
 
    *  Section restructuring (full- and diff-query as self-standing
       sections).
